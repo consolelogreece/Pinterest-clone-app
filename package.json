@@ -1,0 +1,24 @@
+{
+  "name": "pinterest-clone-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --exec babel-node -- index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3",
+    "helmet": "^3.12.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.7.0",
+    "nodemon": "^1.17.5",
+    "webpack": "^4.10.2",
+    "webpack-dev-server": "^3.1.4"
+  }
+}
