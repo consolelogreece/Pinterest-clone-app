@@ -36,6 +36,7 @@ class SigninForm extends Component {
 		if (Object.keys(errors).length === 0) {
 			this.setState({loading:true})
 			this.props.signin(this.state.data).catch(err => {
+				console.log(err.response.data.errors)
 				this.setState({errors:err.response.data.errors, loading:false})
 			})
 		} 

@@ -6,9 +6,14 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/auth-routes';
 import passportSetup from './config/passport-setup'
 import cors from 'cors';
-import mongoClient from 'mongodb'
+import mongoClient from 'mongodb';
+import nodemailer from 'nodemailer';
+
+process.on('warning', e => console.warn(e.stack))
 
 dotenv.config();
+
+const app = express();
 
 let db;
 
@@ -21,7 +26,23 @@ mongoClient.connect(process.env.MONGO_URL, (err, database) => {
 });
 
 
-const app = express();
+let smtpConfig = {
+    host: process.env.SMTP_SERVER_NAME,
+    port: process.env.SMTP_SERVER_PORT,
+    connectionTimeout:3000,
+    auth: {
+        user: process.env.SMTP_USERNAME,
+        pass: process.env.SMTP_PASSWORD
+    }
+};
+
+let transporter = nodemailer.createTransport(smtpConfig)
+
+app.set("transporterObject", transporter)
+
+
+
+
 
 
 

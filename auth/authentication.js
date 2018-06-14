@@ -74,10 +74,9 @@ export const validateSigninCredentials = (credentials) => {
 }
 
 export const validateChangePassword = (credentials) => {
-
-	if (credentials.oldPass === "") return true
-	if (credentials.newPass === "") return true
-	if (credentials.confirmPass !== credentials.newPass) return true
+	if (credentials.currentpassword === "") return true
+	if (credentials.newpassword === "") return true
+	if (credentials.confirmpassword !== credentials.newpassword) return true
 	return false
 }
 

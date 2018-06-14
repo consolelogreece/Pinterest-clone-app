@@ -1,11 +1,18 @@
 import React, { Component } from 'react'
-import Signinform from '../forms/signinform'
-import { signin_native, signin_google } from '../../actions/auth'
+import SigninForm from '../forms/signinform'
+import { resetPasswordRequestEmail, signin_native, signin_google } from '../../actions/auth'
 import { connect } from 'react-redux';
-import { Button } from 'semantic-ui-react'
+import { Button } from 'semantic-ui-react';
+import PasswordResetRequestForm from '../forms/passwordresetrequestform';
 
 class signinpage extends Component {
+	state={
+		reset:false
+	}
 
+	resetpassword = data => resetPasswordRequestEmail(data)
+
+	setReset = () => this.setState({reset:!this.state.reset})
 
 	signin_native = data => this.props.signin_native(data).then(() => this.props.history.push("/"))
 
@@ -15,9 +22,7 @@ class signinpage extends Component {
 	render(){
 		return(
 			<div>
-				<Signinform signin={this.signin_native} />
-				<Button onClick={() => this.signin_google()} id="google">Google+</Button>
-				<Button id="github">Github</Button>
+				{this.state.reset ? <PasswordResetRequestForm resetPassword={this.resetpassword} setReset={this.setReset}/> : <SigninForm setReset={this.setReset} signin={this.signin_native}/>}
 			</div>
 		)
 	}

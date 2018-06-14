@@ -57,5 +57,15 @@ export const signin_google_redirect = code => dispatch => {
 	})
 }
 
+export const resetPasswordRequestEmail = credentials => {
+	axios.post('/auth/resetpasswordrequestemail', {credentials})
+}
 
+export const resetPassword = credentials => {
+	return axios.post('/auth/resetpassword', {credentials})
+}
+
+export const changePassword = credentials => {
+	return axios.post('auth/changepassword', { credentials })
+}
 //export const signin_github

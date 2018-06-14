@@ -33,7 +33,9 @@ class signupform extends Component {
 	}
 
 	signup = () => {
- 		this.props.signup(this.state.data)
+ 		this.props.signup(this.state.data).catch(err => {
+ 			this.setState({errors:err.response.data.errors, loading:false})
+ 		})
 	}
 
 	validate = () => {
