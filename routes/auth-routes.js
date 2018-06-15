@@ -88,6 +88,14 @@ router.post('/changepassword', (req, res) => {
 	})
 })
 
+
+//submit new post 
+router.post('/newpost', (req, res) => {
+	//dummy response, yet to implement functionality
+	res.status(200).json({type:'general', message:'post successful', data:null, errors:null})
+})
+
+
 export default router;
 
 

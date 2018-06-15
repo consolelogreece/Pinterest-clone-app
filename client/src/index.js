@@ -15,7 +15,10 @@ import { userSignedIn_Native } from './actions/auth'
 import "semantic-ui-css/semantic.min.css"
 
 const initialState = {
-	//initial state
+	app:{
+		renderNewPostPopup:false
+	}
+	
 }
 
 const store = createStore(rootreducer, initialState, composeWithDevTools(applyMiddleware(thunk)))
