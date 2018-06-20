@@ -7,8 +7,8 @@ import validator from 'validator'
 class SigninForm extends Component {
 	state={
 		data:{
-			email:"",
-			password:""
+			email:"a@a.com",
+			password:"a"
 		},
 		loading:false,
 		errors:{}	
@@ -36,8 +36,8 @@ class SigninForm extends Component {
 		if (Object.keys(errors).length === 0) {
 			this.setState({loading:true})
 			this.props.signin(this.state.data).catch(err => {
-				console.log(err.response.data.errors)
-				this.setState({errors:err.response.data.errors, loading:false})
+
+				this.setState({errors:{general:"Invalid Credentials"}, loading:false})
 			})
 		} 
 	}

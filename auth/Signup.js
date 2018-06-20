@@ -45,10 +45,12 @@ const addToDatabase = (credentials, passwordHash, collection) => {
 		email:credentials.email,
 		username:credentials.username,
 		passwordHash:passwordHash,
-		postIDs:[],
-		likedPostIDs:[],
-		sharedPostIDs:[],
-		friendsIDs:[],
+		platformId:null,
+		platform:'native',
+		postIds:[],
+		likedPostIds:[],
+		sharedPostIds:[],
+		friendsIds:[],
 		resetHash:null
 	}
 

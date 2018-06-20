@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import rootreducer from './rootreducer'
 
@@ -10,28 +10,34 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
-import { userSignedIn_Native } from './actions/auth' 
+import { checkLoggedIn_GetData } from './actions/auth' 
 
 import "semantic-ui-css/semantic.min.css"
 
 const initialState = {
 	app:{
 		renderNewPostPopup:false
+	},
+	user:{
+		isAuthenticated:false
 	}
+
 	
 }
 
 const store = createStore(rootreducer, initialState, composeWithDevTools(applyMiddleware(thunk)))
 
-if (localStorage.PinterestCloneJWT) {
-	const user = { JWT: localStorage.PinterestCloneJWT, email: localStorage.PinterestCloneEmail };
-	store.dispatch(userSignedIn_Native(user));
-}
+checkLoggedIn_GetData().then(response => {
+	if (response.data.isAuthenticated) {
+		store.dispatch({type:"USER_SIGNED_IN", user:response.data.data})
+	}
+
+})
 
 ReactDOM.render(
 	<Provider store={store}>
 		<Router>
-			<App />
+			<Route component={App}/>
 		</Router>
 	</Provider>
 	, 

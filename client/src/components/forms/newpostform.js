@@ -45,8 +45,7 @@ class newpostform extends Component {
 		}
 
 	render(){
-		return(
-
+		return(	
 			<Card style={{'border':'1px solid grey', 'borderRadius':'6px', 'margin':'auto', zIndex:'1', boxShadow:'10px 10px 5px grey', height:"500px", width:"600px"}}>
 				<div style={{'backgroundColor':'#474647', 'width':'auto'}}>
 					<Image style={{"margin":"auto", maxHeight:"300px"}} src={this.state.data.imgurl} onError={e => e.target.src='https://i.imgur.com/l0dkJDp.png'}/> 	
@@ -64,7 +63,6 @@ class newpostform extends Component {
 							<Input value={this.state.data.imgurl} name="imgurl" />
 						</Form.Field>
 					</Form>
-
 					<Grid style={{textAlign:"center"}}>
 					    <Grid.Row>
 					      <Grid.Column width={8}>
@@ -78,8 +76,6 @@ class newpostform extends Component {
 				</div>
 				</Card.Description>
 			</Card>
-
-		
 
 
 		)

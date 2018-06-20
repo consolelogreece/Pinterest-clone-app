@@ -16,13 +16,14 @@ class signinpage extends Component {
 
 	signin_native = data => this.props.signin_native(data).then(() => this.props.history.push("/"))
 
-	signin_google = () => signin_google();
+	signin_google = () => signin_google().then(resp => console.log("=-===", resp));
 	
 
 	render(){
 		return(
 			<div>
 				{this.state.reset ? <PasswordResetRequestForm resetPassword={this.resetpassword} setReset={this.setReset}/> : <SigninForm setReset={this.setReset} signin={this.signin_native}/>}
+				<a href="http://localhost:8080/auth/google">Google+</a>
 			</div>
 		)
 	}

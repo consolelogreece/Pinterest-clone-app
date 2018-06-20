@@ -5,15 +5,30 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth-routes';
 import passportSetup from './config/passport-setup'
-import cors from 'cors';
 import mongoClient from 'mongodb';
 import nodemailer from 'nodemailer';
-
-process.on('warning', e => console.warn(e.stack))
+import mongoose from 'mongoose';
+import cookieSession from 'cookie-session';
+import passport from 'passport';
 
 dotenv.config();
 
 const app = express();
+
+app.use(cookieSession({
+    maxAge:24*60*60*1000,
+    keys:[process.env.COOKIE_SESSION_KEY]
+}));
+
+//init passport
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+mongoose.connect(process.env.MONGO_URL);
+
+
+
 
 let db;
 
@@ -40,36 +55,20 @@ let transporter = nodemailer.createTransport(smtpConfig)
 
 app.set("transporterObject", transporter)
 
-
-
-
-
-
-
-app.use(cors());
-
 app.use(helmet());
-
 
 app.use(bodyParser.json());
 
 
 
-
-//set up routes
+//set up auth routes
 app.use('/auth', authRoutes)
-
-
-
 
 
 // create home route
 app.get('/', (req, res) => {
 	res.send("home");
 })
-
-
-
 
 
 const port = process.env.PORT || 8080;

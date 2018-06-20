@@ -3,10 +3,8 @@ import passport from 'passport';
 import { google } from 'googleapis';
 import keys from '../config/keys'
 import Signup from '../auth/Signup'
-import Signin from '../auth/Signin'
 import Resetpasswordrequestemail from '../auth/Resetpasswordrequestemail';
 import Resetpassword from '../auth/Resetpassword';
-import Changepassword from '../auth/Changepassword'
 
 const router = express.Router();
 
@@ -29,23 +27,22 @@ router.post('/signup', (req, res) => {
 
 
 
-
-router.post("/signin/native", (req, res) => {
-	Signin(req, req.app.get("databaseObject")).then(response => {
-		res.status(response.code).json({type:response.type, message:response.message, data:response.data, errors:response.errors})
-	}).catch(err => {
-	 	// in case of unhandled error, return generic error message
-		console.log(err)
-		res.status(400).json({type:'general', message:'something went wrong', data:null})
-	}) 
+router.get('/checkAuth', (req, res) => {
+	const data = req.user;
+	if (data === undefined){
+		res.status(200).json({isAuthenticated:false, data:null});
+	} else {
+		res.status(200).json({isAuthenticated:true, data:{platform:data.platform, username:data.username, postIds:data.postIds, likedPostIds:data.likedPostIds, sharedPostIds:data.sharedPostIds, friendsIds:data.friendsIds}, errors:null});
+	}
 });
+
 
 
 
 //auth logout
 router.get('/logout', (req, res) => {
-	//handle with passportjs
-	res.send("logging out")
+	req.logout();
+	res.status(200).json({type:'logout', message:'logout successful', data:null, errors:null});
 });
 
 
@@ -77,16 +74,6 @@ router.post('/resetpassword', (req, res) => {
 	})
 })
 
-//change password
-router.post('/changepassword', (req, res) => {
-	Changepassword(req, req.app.get("databaseObject")).then(response => {
-		res.status(response.code).json({type:response.type, message:response.message, data:response.data, errors:response.errors})
-	})
-	.catch(err => {
-		console.log(err)
-		res.status(400).json({type:'general', message:'something went wrong', data:null})
-	})
-})
 
 
 //submit new post 
@@ -96,57 +83,31 @@ router.post('/newpost', (req, res) => {
 })
 
 
+
+
+
+router.post("/signin/native", passport.authenticate('local'), (req, res) => {
+	const data = req.user;
+	res.status(200).json({type:'success', message:'Sign in successful', data:{platform:data.platform, username:data.username, postIds:data.postIds, likedPostIds:data.likedPostIds, sharedPostIds:data.sharedPostIds, friendsIds:data.friendsIds}, errors:null});
+
+});
+
+
+
+router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
+	const data = req.user;
+	res.status(200).json({type:'success', message:'Sign in successful', data:{platform:data.platform, username:data.username, postIds:data.postIds, likedPostIds:data.likedPostIds, sharedPostIds:data.sharedPostIds, friendsIds:data.friendsIds}, errors:null});
+});
+
+
+
+
+router.get('/google', passport.authenticate('google', {
+	scope:['profile']
+}))
+
+
+
+
 export default router;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// router.get('/google/redirect', (req, res) => {
-// 	console.log("redirected")
-// });
-
-
-// router.get('/google', passport.authenticate('google', {
-// 	scope:['profile']
-// }))
-
-
-// //auth with github
-// router.get('/github', (req, res) => {
-// 	//handle with passportjs
-// 	res.send("logging in with github")
-// })
-
-
-
-
-// const oauth2Client = new google.auth.OAuth2(
-// 	keys.google.clientID,
-// 	keys.google.clientSecret,
-// 	'http://localhost:3000/auth/google/redirect'
-// );
-
-// const googleScopes = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
-
-// const googleAuthUrl = oauth2Client.generateAuthUrl({scope:googleScopes});
-// router.post('/google/redirect', async (req, res) => {
-// 	res.end();
-// 	const code = req.body.code;
-// 	const { tokens } = await oauth2Client.getToken(code);
-// 	oauth2Client.setCredentials(tokens);
-	
-// })
-
-// router.get('/google', (req, res) => {
-// 	res.json({url:googleAuthUrl})
-// })

@@ -1,8 +1,5 @@
 import axios from 'axios';
 
-
-
-
 export const signup = credentials => dispatch => {
 	return axios.post('/auth/signup', { credentials })
 				.then(user => {
@@ -14,14 +11,15 @@ export const signup = credentials => dispatch => {
 }
 
 
-
-
+// Call this on initial web app load. As the cookie is http only, this checks if I have a valid cookie, and if I do, return the data.
+export const checkLoggedIn_GetData = () => {
+	return axios.get('/auth/checkAuth')
+}
 
 export const signin_native = credentials => dispatch => {
-	return axios.post('/auth/signin/native', { credentials })
+	return axios.post('/auth/signin/native',  credentials )
 				.then(user => {
-					localStorage.PinterestCloneJWT = user.data.data.JWT;
-					localStorage.PinterestCloneEmail = user.data.data.email;
+					console.log(user)
 					dispatch(userSignedIn_Native(user.data.data))
 					return user
 				})
@@ -38,10 +36,8 @@ export const userSignedIn_Native = (user) => {
 
 
 
-
-
 export const signin_google = () => {
-	axios.get('/auth/google').then(response => {
+	return axios.get('/auth/google').then(response => {
 		console.log("RESPONSE: ", response)
 		if (response.status === 200) {
 			window.location = response.data.url
@@ -50,10 +46,8 @@ export const signin_google = () => {
 }
 
 export const signin_google_redirect = code => dispatch => {
-	return axios.post('/auth/google/redirect', {code:code}).then(response => {
-		console.log("RESPONSE: ", response)
-	}).then(data => {
-		dispatch({type:'LOGIN_GOOGLE', data:{}})
+	return axios.get(`/auth/google/redirect?code=${code}`, {code:code}).then(response => {
+		dispatch({type:'LOGIN_GOOGLE', user:response.data.data})
 	})
 }
 
@@ -68,4 +62,12 @@ export const resetPassword = credentials => {
 export const changePassword = credentials => {
 	return axios.post('auth/changepassword', { credentials })
 }
-//export const signin_github
+
+export const logout_google = () => dispatch => {
+	return axios.get("/auth/google/logout")
+		.then(user => {
+			dispatch({type:"USER_LOGGED_OUT"})
+		})
+}
+
+
