@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth-routes';
+import appRoutes from './routes/app-routes';
 import passportSetup from './config/passport-setup'
 import mongoClient from 'mongodb';
 import nodemailer from 'nodemailer';
@@ -63,6 +64,9 @@ app.use(bodyParser.json());
 
 //set up auth routes
 app.use('/auth', authRoutes)
+
+//set up app routes
+app.use('/app', appRoutes)
 
 
 // create home route

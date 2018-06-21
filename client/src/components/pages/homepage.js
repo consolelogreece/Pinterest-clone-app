@@ -11,7 +11,6 @@ class homepage extends Component {
 			<div style={{ width:'100%', margin:'auto', 'backgroundColor':  this.props.renderNewPostPopup ? 'rgba(0,0,0,0.4)' : null}}>
 				<h1>home</h1><br />
 				<button onClick={() => this.props.onToggleClick()}>toggle post popup</button> <br />
-				<h4>Implement login persistency. Make a call to the server on app load. If you have a cookie, server will send back the details, and can login with those. Otherwise, you arent logged in. proceed as normal</h4>	
 				<button onClick={() => axios.get('/auth/logout')}>logout</button>
 			</div>
 		)

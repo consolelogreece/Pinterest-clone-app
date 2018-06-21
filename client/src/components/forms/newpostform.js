@@ -13,6 +13,12 @@ class newpostform extends Component {
 		}
 
 		handleSubmit = () => {
+
+			if (!this.props.isAuthenticated) {
+				this.props.redirect_to_login();
+				this.props.closeform();
+			}
+
 			const errors = this.validate()
 			this.setState({errors:errors})
 		
@@ -48,7 +54,7 @@ class newpostform extends Component {
 		return(	
 			<Card style={{'border':'1px solid grey', 'borderRadius':'6px', 'margin':'auto', zIndex:'1', boxShadow:'10px 10px 5px grey', height:"500px", width:"600px"}}>
 				<div style={{'backgroundColor':'#474647', 'width':'auto'}}>
-					<Image style={{"margin":"auto", maxHeight:"300px"}} src={this.state.data.imgurl} onError={e => e.target.src='https://i.imgur.com/l0dkJDp.png'}/> 	
+					<Image style={{"margin":"auto", height:"300px"}} src={this.state.data.imgurl} onError={e => e.target.src='https://i.imgur.com/l0dkJDp.png'}/> 	
 				</div>
 				<Card.Header style={{textAlign:"center"}}> <b>Make it a good'n</b> </Card.Header>
 				<Card.Description>

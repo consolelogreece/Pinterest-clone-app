@@ -4,7 +4,6 @@ export const signup = credentials => dispatch => {
 	return axios.post('/auth/signup', { credentials })
 				.then(user => {
 					//set cookies and dispatch actions
-					console.log('signup successful')
 				}).then(data => {
 					dispatch({type:"USER_SIGNED_UP", data:{}})
 				})
@@ -19,7 +18,6 @@ export const checkLoggedIn_GetData = () => {
 export const signin_native = credentials => dispatch => {
 	return axios.post('/auth/signin/native',  credentials )
 				.then(user => {
-					console.log(user)
 					dispatch(userSignedIn_Native(user.data.data))
 					return user
 				})
@@ -38,7 +36,6 @@ export const userSignedIn_Native = (user) => {
 
 export const signin_google = () => {
 	return axios.get('/auth/google').then(response => {
-		console.log("RESPONSE: ", response)
 		if (response.status === 200) {
 			window.location = response.data.url
 		}

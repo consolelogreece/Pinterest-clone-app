@@ -16,7 +16,11 @@ import "semantic-ui-css/semantic.min.css"
 
 const initialState = {
 	app:{
-		renderNewPostPopup:false
+		renderNewPostPopup:false,
+		userpostpageposts:{
+			posts:[],
+			username:''
+		}
 	},
 	user:{
 		isAuthenticated:false

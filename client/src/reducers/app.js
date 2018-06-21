@@ -4,9 +4,14 @@ export default (state = {}, action = {}) => {
 			return {...state, renderNewPostPopup: !state.renderNewPostPopup }
 			break;
 		case "SUBMIT_POST":
-			console.log("SUBMIT_POST REDUCER TRIGGERED");
 			return state;
 			break;
+		case "RECEIVED_USER_POSTS":
+			return {...state, userpostpageposts:action.data}
+			break;
+		case "DELETE_USER_POSTS_FROM_STORE":
+			return {...state, userpostpageposts:[]}
+
 
 		default: return state;
 	}
