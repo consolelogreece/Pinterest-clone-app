@@ -10,7 +10,7 @@ const UserSchema = new Schema({
 	postIds:Array,
 	likedPostIds:Array,
 	sharedPostIds:Array,
-	friendsIds:Array
+	followingIds:Array
 });
 
 const User = mongoose.model('User', UserSchema);

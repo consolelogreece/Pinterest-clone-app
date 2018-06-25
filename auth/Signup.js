@@ -4,7 +4,6 @@ import { validateSignupCredentials, generateHash } from './authentication'
 
 const Signup = (req, databaseObject) => {
 
-	console.log(databaseObject)
 	const credentials = req.body.credentials
 
 	// validateSignUpCredentials function returns 'false' if the credentials are valid. 
@@ -50,7 +49,7 @@ const addToDatabase = (credentials, passwordHash, collection) => {
 		postIds:[],
 		likedPostIds:[],
 		sharedPostIds:[],
-		friendsIds:[],
+		followingIds:[],
 		resetHash:null
 	}
 

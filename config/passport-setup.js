@@ -37,7 +37,7 @@ passport.use(
 					postIds:[],
 					likedPostIds:[],
 					sharedPostIds:[],
-					friendsIds:[]
+					followingIds:[]
 				}).save().then((newUser) => {
 					done(null, newUser)
 				})

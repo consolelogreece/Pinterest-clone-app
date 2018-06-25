@@ -5,6 +5,7 @@ import keys from '../config/keys'
 import Signup from '../auth/Signup'
 import Resetpasswordrequestemail from '../auth/Resetpasswordrequestemail';
 import Resetpassword from '../auth/Resetpassword';
+import removeDeletedIDs from '../maintenance/database/removeDeletedIDs'
 
 const router = express.Router();
 
@@ -32,9 +33,13 @@ router.get('/checkAuth', (req, res) => {
 	if (data === undefined){
 		res.status(200).json({isAuthenticated:false, data:null});
 	} else {
-		res.status(200).json({isAuthenticated:true, data:{platform:data.platform, username:data.username, postIds:data.postIds, likedPostIds:data.likedPostIds, sharedPostIds:data.sharedPostIds, friendsIds:data.friendsIds}, errors:null});
+		res.status(200).json({isAuthenticated:true, data:{userId: data.id, platform:data.platform, username:data.username, postIds:data.postIds, likedPostIds:data.likedPostIds, sharedPostIds:data.sharedPostIds, followingIds:data.followingIds}, errors:null});
+		
+		// this checks to see if any posts which the user has liked/shared has been removed, and removes any that has.
+		removeDeletedIDs(data)
 	}
 });
+
 
 
 
@@ -74,25 +79,17 @@ router.post('/resetpassword', (req, res) => {
 	})
 })
 
-
-
-
-
-
 router.post("/signin/native", passport.authenticate('local'), (req, res) => {
 	const data = req.user;
-	res.status(200).json({type:'success', message:'Sign in successful', data:{platform:data.platform, username:data.username, postIds:data.postIds, likedPostIds:data.likedPostIds, sharedPostIds:data.sharedPostIds, friendsIds:data.friendsIds}, errors:null});
+	res.status(200).json({type:'success', message:'Sign in successful', data:{userId: data.id, platform:data.platform, username:data.username, postIds:data.postIds, likedPostIds:data.likedPostIds, sharedPostIds:data.sharedPostIds, followingIds:data.followingIds}, errors:null});
 
 });
-
 
 
 router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
 	const data = req.user;
-	res.status(200).json({type:'success', message:'Sign in successful', data:{platform:data.platform, username:data.username, postIds:data.postIds, likedPostIds:data.likedPostIds, sharedPostIds:data.sharedPostIds, friendsIds:data.friendsIds}, errors:null});
+	res.status(200).json({type:'success', message:'Sign in successful', data:{userId: data.id, platform:data.platform, username:data.username, postIds:data.postIds, likedPostIds:data.likedPostIds, sharedPostIds:data.sharedPostIds, followingIds:data.followingIds}, errors:null});
 });
-
-
 
 
 router.get('/google', passport.authenticate('google', {
