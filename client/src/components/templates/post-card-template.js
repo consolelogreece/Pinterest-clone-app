@@ -20,7 +20,7 @@ const card = props => {
 			    			?
 			    			<Icon size="large" onClick={() => props.deletePost(props.id)} link={true} name="delete"/>
 			    			:
-			    			<Icon size="large" onClick={() => props.follow(props.authorId)} link={true} name="angle double right" color={props.isFollowing ? "green" : "grey"}/>
+			    			<Icon size="large" onClick={() => props.follow(props.authorId)} link={true} name="plus square" color={props.isFollowing ? "green" : "grey"}/>
 			    			
 			    		}
 			    	</Grid.Column>

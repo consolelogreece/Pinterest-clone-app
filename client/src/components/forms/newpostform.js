@@ -25,7 +25,6 @@ class newpostform extends Component {
 
 			if (Object.keys(errors).length === 0) {
 				this.setState({loading:true})
-				console.log("== ", this.props.submit)
 				this.props.submit(this.state.data).then(() => this.setState({loading:false}))
 					.catch(err => {
 						this.setState({errors:err.response.data.errors, loading:false})

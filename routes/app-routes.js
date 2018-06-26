@@ -28,7 +28,8 @@ router.post('/newpost', authCheck, (req, res) => {
 	try {
 		const newid = new ObjectID(); // add this id to authors post id list.
 		const addpost = new Post({_id:newid, authorUsername:data.username, authorId:data.id, title:title, imageUrl:imgurl, userLikeIds:[], userShareIds:[], creationDate: new Date}).save();
-		const addPostIdToUser = User.update({_id:data.id}, {$push:{postIds:newid.toString()}})
+		const addPostIdToUser = User.update({_id:data.id}, {$push:{postIds:{$each:[newid.toString()], $position:0}}})
+
 
 		Promise.all([addpost, addPostIdToUser]).then(() => {
 			res.status(200).json({type:'success', message:'Your post has been successfully created', data:{postId:newid}, errors:null})
@@ -53,7 +54,15 @@ router.get("/user", async (req, res) => {
 	try {
 		const id = req.query.id;
 		const userPostsAndUsername = await User.findOne({_id:id}, {postIds:1, _id:0, username:1});
+
+		// if user doesn't exist
+		if (!userPostsAndUsername) {
+			res.status(400).json({type:'error', message:'User doesn\'t exist', data:null, errors:null})
+			return;
+		}
+
 		const postDataArray = await Post.find({_id: {$in:userPostsAndUsername.postIds}})
+
 		res.status(200).json({type:'success', message:'Posts successfully retreived', data:{username:userPostsAndUsername.username, posts:postDataArray}, errors:null})
 	} catch (err) {
 		console.log(err)

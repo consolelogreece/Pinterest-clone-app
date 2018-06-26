@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 
 class App extends Component {
 
-  submitpost = data => this.props.submitpost(data).then(data => console.log('data'));
+  submitpost = data => this.props.submitpost(data);
 
   redirect_to_login = () => this.props.history.push('/signin');
 
@@ -24,6 +24,14 @@ class App extends Component {
   render() {
     return (
       <div style={{ 'wordWrap':'break-word','margin':'0 auto', 'height': '100%', 'width': '100%', maxWidth:'1200px'}}>
+        {/*New post form implemented here, so can be rendered anywhere in the app.*/}
+          <Transition animation='scale' duration={175} visible={this.props.renderNewPostPopup}>
+            <div style={{'width': '90%', 'position': 'fixed', 'left': '50%', 'marginLeft': '-45%',marginTop:"20px", maxHeight:"600px"}}> 
+              <Newpostform redirect_to_login={this.redirect_to_login} isAuthenticated={this.props.isAuthenticated} submit={this.submitpost} closeform={this.props.onToggleClick} />
+            </div>
+          </Transition>
+
+
   	    <Switch>
   	    	<Route path='/signin' exact component={signinpage} />
           <Route path='/signup' exact component={signuppage} />
@@ -33,13 +41,6 @@ class App extends Component {
           <Route path='/auth/google/redirect' component={googleRedirect} />
   	    	<Route path='/' component={homepage} />
         </Switch>
-
-        {/*New post form implemented here, so can be rendered anywhere in the app.*/}
-        <Transition animation='scale' duration={175} visible={this.props.renderNewPostPopup}>
-          <div style={{'width': '90%', 'position': 'fixed', 'left': '50%', 'marginLeft': '-45%'}}> 
-            <Newpostform redirect_to_login={this.redirect_to_login} isAuthenticated={this.props.isAuthenticated}b submit={this.submitpost} closeform={this.props.onToggleClick} />
-          </div>
-        </Transition>
       </div>
     );
   }

@@ -1,13 +1,25 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getUserPosts, deleteUserPostsFromStore, sharePost, unsharePost, likePost, unlikePost, follow, unfollow, deletePost } from '../../actions/appfunctions';
+
 import Masonry from 'react-masonry-component';
+import {Button, Grid, Icon} from 'semantic-ui-react';
+
 import queryString from 'querystring';
 import PostCardTemplate from '../templates/post-card-template';
  
 class userpostpage extends Component {
 
 	mapPosts = () => {
+		if (!this.props.posts) {
+			//if there are no
+			this.populatePostArray();
+			return <h3>loading..</h3>
+		} else {
+
+
+
+
 		return this.props.posts.map(post => {
 			let isLiked;
 			let isShared;
@@ -49,18 +61,21 @@ class userpostpage extends Component {
 			  />
 			)
 		});
+	} 
 	}
 
 	redirectSignin = () => {
 		this.props.history.push("/signin")
 	}
 
-	componentDidMount(){
+	populatePostArray = () => {
 		let parsedUrlObject = queryString.parse(this.props.location.search)
 		if (!Object.prototype.hasOwnProperty.call(parsedUrlObject, '?id')) this.props.history.push("/")
-		else this.props.get_posts(parsedUrlObject['?id'])
+		else return this.props.get_posts(parsedUrlObject['?id']).catch(() => this.props.history.push("/"))
+	}
 
-		
+	componentDidMount(){
+		this.populatePostArray();
 	}
 
 
@@ -71,11 +86,17 @@ class userpostpage extends Component {
 	render(){
 		let postData = this.mapPosts();
 		return(
-		
-				<Masonry elementType='ul' style={{width:'100%', margin:'auto'}}> 
+			<div style={{width:"100%"}}> 
+				<Masonry > 
 					{postData}
 				</Masonry>
-			
+				<div style={{ display:"flex", justifyContent:"center", margin:"auto"}}>			
+					<Icon size="huge" onClick={() => console.log("first")} link={true} name="angle double left"/>
+					<Icon size="huge" onClick={() => console.log("prev")} link={true} name="angle left"/>
+					<Icon size="huge" onClick={() => console.log("next")} link={true} name="angle right"/>
+					<Icon size="huge" onClick={() => console.log("last")} link={true} name="angle double right"/>
+				</div>
+			</div>
 		)
 	}
 }
