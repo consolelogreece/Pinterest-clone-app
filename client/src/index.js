@@ -19,7 +19,8 @@ const initialState = {
 		renderNewPostPopup:false,
 		userpostpageposts:{
 			posts:[],
-			username:''
+			username:'',
+			totalPosts:0
 		}
 	},
 	user:{

@@ -53,6 +53,7 @@ router.post('/newpost', authCheck, (req, res) => {
 router.get("/user", async (req, res) => {
 	try {
 		const id = req.query.id;
+		const page = req.query.page
 		const userPostsAndUsername = await User.findOne({_id:id}, {postIds:1, _id:0, username:1});
 
 		// if user doesn't exist
@@ -61,9 +62,19 @@ router.get("/user", async (req, res) => {
 			return;
 		}
 
-		const postDataArray = await Post.find({_id: {$in:userPostsAndUsername.postIds}})
+		let skipCount = (function(pageLimit, totalPosts, pageno){
+			let skip = pageLimit * page;
 
-		res.status(200).json({type:'success', message:'Posts successfully retreived', data:{username:userPostsAndUsername.username, posts:postDataArray}, errors:null})
+			if (skip > totalPosts) return (totalPosts - (totalPosts % pageLimit))
+			return skip
+		})(8, userPostsAndUsername.postIds.length, page);
+
+
+
+		const postDataArray = await Post.find({_id: {$in:userPostsAndUsername.postIds}}).limit(8).skip(skipCount)
+
+
+		res.status(200).json({type:'success', message:'Posts successfully retreived', data:{username:userPostsAndUsername.username, posts:postDataArray, totalPosts:userPostsAndUsername.postIds.length}, errors:null})
 	} catch (err) {
 		console.log(err)
 		res.status(400).json({type:'error', message:'Something wen\'t wrong', data:null, errors:null})

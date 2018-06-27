@@ -12,9 +12,9 @@ class userpostpage extends Component {
 
 	mapPosts = () => {
 		if (!this.props.posts) {
-			//if there are no
+			//if there are no posts
 			this.populatePostArray();
-			return <h3>loading..</h3>
+			return <h3>loading...</h3>
 		} else {
 
 
@@ -69,9 +69,17 @@ class userpostpage extends Component {
 	}
 
 	populatePostArray = () => {
-		let parsedUrlObject = queryString.parse(this.props.location.search)
-		if (!Object.prototype.hasOwnProperty.call(parsedUrlObject, '?id')) this.props.history.push("/")
-		else return this.props.get_posts(parsedUrlObject['?id']).catch(() => this.props.history.push("/"))
+
+		let parsedUrlObject = queryString.parse(this.props.history.location.search)
+
+		if (!Object.prototype.hasOwnProperty.call(parsedUrlObject, '?id')) {
+			this.props.history.push("/")
+		} 
+		else {
+			const page = parseInt(parsedUrlObject["page"], 10) || 0;
+			
+			return this.props.get_posts({id:parsedUrlObject['?id'], page:page}).catch(() => this.props.history.push("/"))
+		}
 	}
 
 	componentDidMount(){
@@ -83,18 +91,53 @@ class userpostpage extends Component {
 		this.props.deleteUserPostsFromStore();
 	}
 
+	handlePageChange = e => {
+
+		let parsedUrlObject = queryString.parse(this.props.history.location.search)
+		let page = parseInt(parsedUrlObject["page"], 10) || 0;
+
+		if (!Object.prototype.hasOwnProperty.call(parsedUrlObject, '?id')) {
+			this.props.history.push("/")
+		} 
+
+		const pagepath = `${this.props.history.location.pathname}?id=${parsedUrlObject['?id']}&page=`
+
+		switch(e.target.id) {
+		
+			case "first":
+				this.props.history.push(pagepath + "0");
+				this.populatePostArray();
+				break;
+			case "prev":
+				if (page !== 0) this.props.history.push(pagepath + (page - 1));
+				this.populatePostArray();
+				break;
+			case "next":
+				this.props.history.push(pagepath + (page + 1));
+				this.populatePostArray();
+				break;
+			case "last":
+				this.props.history.push(pagepath + (Math.floor(this.props.totalPosts / 8)));
+				this.populatePostArray();
+				break;
+		}
+	}
+
+
 	render(){
+
 		let postData = this.mapPosts();
+
 		return(
 			<div style={{width:"100%"}}> 
 				<Masonry > 
 					{postData}
 				</Masonry>
-				<div style={{ display:"flex", justifyContent:"center", margin:"auto"}}>			
-					<Icon size="huge" onClick={() => console.log("first")} link={true} name="angle double left"/>
-					<Icon size="huge" onClick={() => console.log("prev")} link={true} name="angle left"/>
-					<Icon size="huge" onClick={() => console.log("next")} link={true} name="angle right"/>
-					<Icon size="huge" onClick={() => console.log("last")} link={true} name="angle double right"/>
+				<div onClick={e => this.handlePageChange(e)} style={{ display:"flex", justifyContent:"center", margin:"auto"}}>			
+					<Icon id="first" size="huge" link={true} name="angle double left"/>
+					<Icon id="prev" size="huge" link={true} name="angle left"/>
+					<Icon id="next" size="huge" link={true} name="angle right"/>
+					<Icon id="last" size="huge" link={true} name="angle double right"/>
 				</div>
 			</div>
 		)
@@ -141,8 +184,9 @@ const mapStateToProps = state => {
 		likedPostIds:state.user.likedPostIds,
 		sharedPostIds:state.user.sharedPostIds,
 		followingIds:state.user.followingIds,
-		isAuthenticated:state.user.isAuthenticated
+		isAuthenticated:state.user.isAuthenticated,
+		totalPosts:state.app.userpostpageposts.totalPosts
 	}
 }
 
-export default connect (mapStateToProps, mapDispatchToProps)(userpostpage);
+export default connect(mapStateToProps, mapDispatchToProps)(userpostpage);

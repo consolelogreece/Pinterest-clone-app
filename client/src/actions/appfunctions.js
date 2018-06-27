@@ -10,8 +10,8 @@ export const submitpost = data => dispatch => {
 	})
 }
 
-export const getUserPosts = userid => dispatch => {
-	return axios.get("/app/user?id="+ userid).then(response => {
+export const getUserPosts = data => dispatch => {
+	return axios.get("/app/user?id="+ data.id + "&page=" + data.page).then(response => {
 		dispatch({type:"RECEIVED_USER_POSTS", data:response.data.data});
 	})
 }
