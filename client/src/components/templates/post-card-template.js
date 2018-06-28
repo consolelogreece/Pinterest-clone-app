@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Card, Button, Icon, Grid } from 'semantic-ui-react';
+import { Image, Card, Icon, Grid } from 'semantic-ui-react';
 import moment from 'moment';
 
 const card = props => {

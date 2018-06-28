@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import SigninForm from '../forms/signinform'
 import { resetPasswordRequestEmail, signin_native, signin_google } from '../../actions/auth'
 import { connect } from 'react-redux';
-import { Button } from 'semantic-ui-react';
 import PasswordResetRequestForm from '../forms/passwordresetrequestform';
 
 class signinpage extends Component {

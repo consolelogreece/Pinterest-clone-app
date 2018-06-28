@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Route, Redirect, withRouter, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 import homepage from './components/pages/homepage';
 import signinpage from './components/pages/signinpage';
 import signuppage from './components/pages/signuppage';
 import resetpasswordpage from './components/pages/resetpasswordpage';
 import changepasswordpage from './components/pages/changepasswordpage';
+import feedpage from './components/pages/feedpage';
 import userpostpage from './components/pages/userpostpage';
 import googleRedirect from './components/redirect-pages/google-redirect';
 
@@ -36,6 +37,7 @@ class App extends Component {
   	    	<Route path='/signin' exact component={signinpage} />
           <Route path='/signup' exact component={signuppage} />
           <Route path='/user' component={userpostpage} />
+          <Route path='/feed' component={feedpage} />
           <Route path='/resetpassword' component={resetpasswordpage} />
           <Route path='/changepassword' component={changepasswordpage} />
           <Route path='/auth/google/redirect' component={googleRedirect} />

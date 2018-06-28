@@ -45,7 +45,7 @@ class signupform extends Component {
 		if (!validator.isEmail(data.email)) errors['email'] = "Invalid email";
 		if (data.email === '') errors['email'] = "Can't be blank";
 		if (data.password === '') errors['password'] = "Can't be blank";
-		if (data.confirmpassword !== data.confirmpassword) errors['confirmpassword'] = "Passwords don't match";
+		if (data.confirmpassword !== data.password) errors['confirmpassword'] = "Passwords don't match";
 		return errors;
 	}
 
@@ -57,7 +57,7 @@ class signupform extends Component {
 		const {data, loading, errors} = this.state;
 		return(
 
-			<Container style={{"maxWidth":"960px"}}>
+			<Container loading={loading} style={{"maxWidth":"960px"}}>
 				<Form>
 					<Form.Field error={!!errors.username}>
 						<label>Username</label>

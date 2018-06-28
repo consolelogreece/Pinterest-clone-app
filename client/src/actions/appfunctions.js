@@ -10,14 +10,20 @@ export const submitpost = data => dispatch => {
 	})
 }
 
-export const getUserPosts = data => dispatch => {
+export const getPosts = data => dispatch => {
 	return axios.get("/app/user?id="+ data.id + "&page=" + data.page).then(response => {
-		dispatch({type:"RECEIVED_USER_POSTS", data:response.data.data});
+		dispatch({type:"RECEIVED_POSTS", data:response.data.data});
 	})
 }
 
-export const deleteUserPostsFromStore = () => {
-	return ({type:"DELETE_USER_POSTS_FROM_STORE"});
+export const getFeed = data => dispatch => {
+	return axios.get("/app/feed?page=" + data.page).then(response => {
+		dispatch({type:"RECEIVED_POSTS", data:response.data.data});
+	})
+}
+
+export const deletePostsFromStore = () => {
+	return ({type:"DELETE_POSTS_FROM_STORE"});
 }
 
 
@@ -40,6 +46,7 @@ export const unlikePost = postId => dispatch => {
 
 export const sharePost = postId => dispatch => {
 	dispatch({type:"USER_SHARED_POST", id:postId})
+	console.log(postId)
 	return axios.post('/app/sharepost', {postId: postId}).catch(response => {
 		// if error, 'UNAHRE' post. This gives more snappy feedback when clicking share, as it appears to be shared immediately
 		dispatch({type:"USER_UNSHARED_POST", id:postId});

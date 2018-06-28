@@ -17,7 +17,7 @@ import "semantic-ui-css/semantic.min.css"
 const initialState = {
 	app:{
 		renderNewPostPopup:false,
-		userpostpageposts:{
+		currentPagePosts:{
 			posts:[],
 			username:'',
 			totalPosts:0

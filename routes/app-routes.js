@@ -5,8 +5,6 @@ const ObjectID = require('mongodb').ObjectID;
 
 const router = express.Router();
 
-
-
 const authCheck = (req, res, next) => {
 	if (!req.user){
 		//if user not logged in
@@ -16,8 +14,6 @@ const authCheck = (req, res, next) => {
 		next();
 	}
 };
-
-
 
 
 //submit new post 
@@ -42,18 +38,15 @@ router.post('/newpost', authCheck, (req, res) => {
 	} catch (err) {
 		console.log(err);
 		res.status(400).json({type:'error', message:'Something wen\'t wrong', data:null, errors:null})
-	}
-
-		
-
-		
+	}	
 	
 })
 
 router.get("/user", async (req, res) => {
 	try {
+		const pageLimit = 12;
 		const id = req.query.id;
-		const page = req.query.page
+		const page = req.query.page || 0;
 		const userPostsAndUsername = await User.findOne({_id:id}, {postIds:1, _id:0, username:1});
 
 		// if user doesn't exist
@@ -67,11 +60,11 @@ router.get("/user", async (req, res) => {
 
 			if (skip > totalPosts) return (totalPosts - (totalPosts % pageLimit))
 			return skip
-		})(8, userPostsAndUsername.postIds.length, page);
+		})(pageLimit, userPostsAndUsername.postIds.length, page);
 
 
 
-		const postDataArray = await Post.find({_id: {$in:userPostsAndUsername.postIds}}).limit(8).skip(skipCount)
+		const postDataArray = await Post.find({_id: {$in:userPostsAndUsername.postIds}}).limit(pageLimit).skip(skipCount)
 
 
 		res.status(200).json({type:'success', message:'Posts successfully retreived', data:{username:userPostsAndUsername.username, posts:postDataArray, totalPosts:userPostsAndUsername.postIds.length}, errors:null})
@@ -81,6 +74,41 @@ router.get("/user", async (req, res) => {
 	}
 	
 });
+
+router.get("/feed", authCheck,  async (req, res) => {
+	try {
+		const pageLimit = 12;
+		const page = req.query.page || 0;
+		const data = req.user;
+
+		const userFollowingData = await User.find({_id:{$in:data.followingIds}})
+
+		let allIds = [];
+
+		for (let i = 0; i < userFollowingData.length; i++){
+			allIds = allIds.concat([...userFollowingData[i].postIds, ...userFollowingData[i].sharedPostIds])
+		}
+
+		const uniqueIdArray =  allIds.filter((item, pos, ar) => ar.indexOf(item) === pos);
+
+		const skipCount = (function(pageLimit, totalPosts, pageno){
+			let skip = pageLimit * page;
+
+			if (skip > totalPosts) return (totalPosts - (totalPosts % pageLimit))
+			return skip
+		})(pageLimit, allIds.size, page);
+
+		const posts = await Post.find({_id:{$in:allIds}}).sort({creationDate:-1}).limit(pageLimit).skip(skipCount);
+
+		res.status(200).json({type:'success', message:'Feed successfully retreived', data:{posts:posts, totalPosts:uniqueIdArray.length}, errors:null})
+		
+	} catch (err) {
+		console.log(err)
+		res.status(400).json({type:'error', message:'Something wen\'t wrong', data:null, errors:null})
+	}
+	
+});
+
 
 
 
@@ -209,5 +237,4 @@ router.post("/deletepost", authCheck, (req, res) => {
 
 });
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 export default router;

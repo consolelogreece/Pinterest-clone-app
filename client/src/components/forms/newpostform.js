@@ -71,7 +71,7 @@ class newpostform extends Component {
 					<Grid style={{textAlign:"center"}}>
 					    <Grid.Row>
 					      <Grid.Column width={8}>
-					        <Button style={{width:"90%"}} primary onClick={() => this.handleSubmit()} primary>Submit</Button>
+					        <Button style={{width:"90%"}} onClick={() => this.handleSubmit()} primary>Submit</Button>
 					      </Grid.Column>
 					      <Grid.Column width={8}>
 					        <Button style={{width:"90%", backgroundColor:'#b8514a'}} primary onClick={() => this.props.closeform()}>cancel</Button>

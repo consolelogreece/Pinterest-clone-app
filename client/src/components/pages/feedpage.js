@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { getPosts, deletePostsFromStore, sharePost, unsharePost, likePost, unlikePost, follow, unfollow, deletePost } from '../../actions/appfunctions';
+import { getFeed, deletePostsFromStore, sharePost, unsharePost, likePost, unlikePost, follow, unfollow, deletePost } from '../../actions/appfunctions';
 
 import CardContainer from '../containers/cardContainer';
 
@@ -11,32 +11,26 @@ import {Icon} from 'semantic-ui-react';
 import queryString from 'querystring';
 import PostCardTemplate from '../templates/post-card-template';
  
-class userpostpage extends Component {
+ 
+class feedpage extends Component {
 
-	populatePostArray = () => {
+	populatePostArray = () => {	
 
 		let parsedUrlObject = queryString.parse(this.props.history.location.search)
-
-		if (!Object.prototype.hasOwnProperty.call(parsedUrlObject, '?id')) {
-			this.props.history.push("/")
-		} 
-		else {
-			const page = parseInt(parsedUrlObject["page"], 10) || 0;
+		
+		const page = parseInt(parsedUrlObject["?page"], 10) || 0;
 			
-			return this.props.get_posts({id:parsedUrlObject['?id'], page:page}).catch(() => this.props.history.push("/"))
-		}
+		return this.props.get_posts({page:page}).catch(() => this.props.history.push("/"))
+		
 	}
 
 	handlePageChange = e => {
 
 		let parsedUrlObject = queryString.parse(this.props.history.location.search)
-		let page = parseInt(parsedUrlObject["page"], 10) || 0;
 
-		if (!Object.prototype.hasOwnProperty.call(parsedUrlObject, '?id')) {
-			this.props.history.push("/")
-		} 
+		let page = parseInt(parsedUrlObject["?page"], 10) || 0;
 
-		const pagepath = `${this.props.history.location.pathname}?id=${parsedUrlObject['?id']}&page=`
+		const pagepath = `${this.props.history.location.pathname}?page=`
 
 		switch(e.target.id) {
 		
@@ -67,15 +61,13 @@ class userpostpage extends Component {
 			<CardContainer {...this.props} populatePostArray={this.populatePostArray} handlePageChange={this.handlePageChange} />
 		)
 	}
-
 }
-
 
 const mapDispatchToProps = dispatch => {
 
 	return {
 		get_posts: (userid) => {
-			return dispatch(getPosts(userid));
+			return dispatch(getFeed(userid));
 		},
 		deletePostsFromStore: () => {
 			dispatch(deletePostsFromStore());
@@ -104,6 +96,7 @@ const mapDispatchToProps = dispatch => {
 	}
 }
 
+
 const mapStateToProps = state => {
 	return {
 		posts:state.app.currentPagePosts.posts,
@@ -117,4 +110,4 @@ const mapStateToProps = state => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(userpostpage);
+export default connect(mapStateToProps, mapDispatchToProps)(feedpage);
