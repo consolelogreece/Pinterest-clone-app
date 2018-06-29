@@ -3,9 +3,6 @@ export default (state = {}, action = {}) => {
 		case "USER_SIGNED_IN":
 			return {...state, ...action.user, isAuthenticated:true}
 
-		case "USER_SIGNED_OUT":
-			return {app:{renderNewPostPopup:false}, user:{isAuthenticated:false}};	
-
 		case "LOGIN_GOOGLE":
 			return {...state, ...action.user, isAuthenticated:true}
 

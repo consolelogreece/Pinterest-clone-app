@@ -83,7 +83,7 @@ class cardContainer extends Component {
 
 		return(
 			<div style={{width:"100%"}}> 
-				<Masonry > 
+				<Masonry options = {{fitWidth:true}} style={{'margin':"auto", alignItems:'center', justifyContent:'center',  display:'flex'}} > 
 					{postData}
 				</Masonry>
 				<div onClick={e => this.props.handlePageChange(e)} style={{ display:"flex", justifyContent:"center", margin:"auto"}}>			

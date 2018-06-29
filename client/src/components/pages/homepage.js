@@ -11,7 +11,6 @@ class homepage extends Component {
 			<div style={{ width:'100%', margin:'auto', 'backgroundColor':  this.props.renderNewPostPopup ? 'rgba(0,0,0,0.4)' : null}}>
 				<h1>home</h1><br />
 				<button onClick={() => this.props.onToggleClick()}>toggle post popup</button> <br />
-				<button onClick={() => axios.get('/auth/logout')}>logout</button>
 			</div>
 		)
 	}

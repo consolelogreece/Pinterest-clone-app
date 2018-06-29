@@ -26,8 +26,6 @@ const initialState = {
 	user:{
 		isAuthenticated:false
 	}
-
-	
 }
 
 const store = createStore(rootreducer, initialState, composeWithDevTools(applyMiddleware(thunk)))

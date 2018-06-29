@@ -60,8 +60,8 @@ export const changePassword = credentials => {
 	return axios.post('auth/changepassword', { credentials })
 }
 
-export const logout_google = () => dispatch => {
-	return axios.get("/auth/google/logout")
+export const signOut = () => dispatch => {
+	return axios.get("/auth/logout")
 		.then(user => {
 			dispatch({type:"USER_LOGGED_OUT"})
 		})
