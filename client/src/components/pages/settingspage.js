@@ -4,13 +4,16 @@ import { changePassword } from '../../actions/auth';
 import Changepasswordform from '../forms/changepasswordform';
 
 
-class changepasswordpage extends Component {
+class settingspage extends Component {
 
 	changePassword = credentials => changePassword(credentials)
 
 	render(){
 		return(
-			<Changepasswordform changePassword={this.changePassword} token={this.props.token || null}/>
+			<div>
+				<h1>Settings</h1>
+				<Changepasswordform changePassword={this.changePassword} token={this.props.token || null}/>
+			</div>
 		)
 	}
 
@@ -23,4 +26,4 @@ const mapStateToProps = state => {
 	})
 }
 
-export default connect(mapStateToProps)(changepasswordpage)
+export default connect(mapStateToProps)(settingspage)

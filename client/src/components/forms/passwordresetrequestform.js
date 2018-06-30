@@ -50,7 +50,7 @@ class PasswordResetRequestForm extends Component {
 						{!!errors.email && <ErrorMessageInline text={errors.email} />}
 						{!!sent && <SuccessMessageInline text={"A reset link will be sent if the email exists"} />} {/*A generic success message like this that always shows helps prevent enumeration attacks.*/}
 					</Form.Field>
-					<Button primary onClick={() => this.handleSubmit()}>Send reset email</Button> <Button onClick={() => this.props.setReset()}>Back</Button>		
+					<Button style={{backgroundColor:"#d15559", color:"#fff"}} onClick={() => this.handleSubmit()}>Send reset email</Button> <Button onClick={() => this.props.setReset()}>Back</Button>		
 				</Form>
 			</div>
 

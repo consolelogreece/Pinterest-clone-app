@@ -2,13 +2,26 @@ import express from 'express';
 import passport from 'passport';
 import { google } from 'googleapis';
 import keys from '../config/keys'
-import Signup from '../auth/Signup'
+import Signup from '../auth/Signup';
+import { User } from '../models/user-model';
 import Resetpasswordrequestemail from '../auth/Resetpasswordrequestemail';
 import Resetpassword from '../auth/Resetpassword';
 import removeDeletedIDs from '../maintenance/database/removeDeletedIDs'
 
+import { isCorrectPassword, generateHash, validateChangePassword } from '../auth/authentication';
+
 const router = express.Router();
 
+
+const authCheck = (req, res, next) => {
+	if (!req.user){
+		//if user not logged in
+		res.status(401).json({type:'error', message:'You are not authorized to perform this action', data:null, errors:null});
+	} else {
+		// if logged in
+		next();
+	}
+};
 
 
 //auth signup
@@ -45,7 +58,7 @@ router.get('/checkAuth', (req, res) => {
 
 
 //auth logout
-router.get('/logout', (req, res) => {
+router.get('/logout', authCheck, (req, res) => {
 	req.logout();
 	res.status(200).json({type:'logout', message:'logout successful', data:null, errors:null});
 });
@@ -77,6 +90,40 @@ router.post('/resetpassword', (req, res) => {
 		
 		
 	})
+})
+
+router.post('/changepassword', authCheck, async (req, res) => {
+	const data = req.user;
+	const credentials = req.body.credentials;
+	try {
+
+		if (validateChangePassword(credentials)) {
+			res.status(403).json({type:"general", message:"You are not authorized to perform this action", data:null, errors:{general:"Not authorized"}})
+			return;
+		} 
+
+		const isValidPassword = await isCorrectPassword(credentials.currentpassword, data.passwordHash);
+
+		if (!isValidPassword) {
+			res.status(403).json({type:"general", message:"You are not authorized to perform this action", data:null, errors:{currentpassword:"Incorrect password"}}) 
+			return;
+		}
+
+		const newPasswordHash = await generateHash(credentials.newpassword);
+
+		User.updateOne({_id:data._id}, {$set: {passwordHash:newPasswordHash}}).then(data => {
+		 	res.status(200).json({type:"general", message:"Password change successful", data:null, errors:null})
+		}).catch(err => {
+			console.log(err);
+			res.status(400).json({type:'general', errors:{general:"something wen't wrong"}, message:'something went wrong', data:null})
+
+		})
+
+	} catch (err) {
+		console.log(err);
+		res.status(400).json({type:'general',errors:{general:"something wen't wrong"}, message:'something went wrong', data:null})
+	}
+
 })
 
 router.post("/signin/native", passport.authenticate('local'), (req, res) => {

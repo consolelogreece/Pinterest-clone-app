@@ -64,7 +64,7 @@ class PasswordResetForm extends Component {
 					{success && <SuccessMessageInline text="Password change successful!" />}
 					{errors.general && <ErrorMessageInline text={errors.general} />}  
 				</Form>	
-				<Button primary onClick={() => this.handleSubmit()}>Change password</Button>
+				<Button style={{backgroundColor:"#d15559", color:"#fff"}} onClick={() => this.handleSubmit()}>Change password</Button>
 			</div>
 
 		)

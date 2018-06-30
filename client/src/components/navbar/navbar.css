@@ -1,22 +1,38 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+@import url('https://fonts.googleapis.com/css?family=Norican');
+
+.app-header {
+  background-color:  #d15559;
+}
+
+.app-header-text {
+  font-family: 'Norican', cursive;
+  color:#fff;
+  font-size:45px;
+  padding-left:10px;
+}
+
 #navbarcontainer {
-  margin-top: 20px;
   list-style-type: none;
   display: block;
-  background-color: #fff;
+  background-color: #d15559;
 }
 #navbarlist {
   margin: 0 auto;
-  width: 600px;
+  width: 765px;
+  display:flex;
+  justify-content:center;
+  font-family: 'Montserrat', sans-serif;
 }
 #navbarlist > li {
   cursor: pointer;
   display: inline-block;
   padding: 10px 45px;
   text-align: center;
-  background-color: #fff;
-  color: #191919;
+  background-color: #d15559;
+  color: #fff;
   border-bottom: 3px solid;
-  border-color: #fff;
+  border-color: #d15559;
 }
 #navbarlist > li a,
 #navbarlist > a:hover {
@@ -25,32 +41,33 @@
 }
 #navbarlist > li:hover {
   border-bottom: 3px solid;
-  border-color: #191919;
+  border-color: #fff;
 }
 #navbar_list--mobile {
   padding-left:0 !important;
   display: inline-block;
   margin:0 !important;
   width:100%;
+  font-family: 'Montserrat', sans-serif;
 }
 #navbar_container--mobile {
   display:none;
   list-style-type: none;
-  padding: 10px 0 0 0;
 }
 #navbar_list--mobile > li {
   cursor: pointer;
   display: block;
   padding: 15px 0px 10px 0px;
   text-align: center;
-  background-color: #fff;
-  color:#191919;
-  border-color: #412344;
+  background-color: #d15559;
+  color:#fff;
+  border-bottom:1px solid rgba(255,255,255,0.5);
+
 }
 #navbar_list--mobile > li a,
 #navbar_list--mobile > a:hover {
   text-decoration: none;
-  color: #191919;
+  color: #fff;
 }
 
 .menu-item {

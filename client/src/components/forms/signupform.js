@@ -79,7 +79,7 @@ class signupform extends Component {
 						<Input name="confirmpassword" type="password" id="confirmpassword" value={data.confirmpassword} onChange={(e) => this.handlechange(e)} />
 						{!!errors.confirmpassword && <ErrorMessageInline text={errors.confirmpassword} /> }
 					</Form.Field>
-					<Button onClick={() => this.handleSignup()}>Sign up </Button>
+					<Button style={{backgroundColor:"#d15559", color:"#fff"}} onClick={() => this.handleSignup()}>Sign up </Button>
 				</Form>
 			</Container>
 

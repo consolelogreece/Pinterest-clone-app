@@ -1,0 +1,19 @@
+.app-footer {
+	background-color: #d15559;
+	color:#fff;
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0; 
+	height:80px;
+	margin-top:80px;
+	text-align: center;
+}
+
+.footer-text-box {
+	margin-top:10px;
+}
+
+.github-button {
+	color:#fff;
+}

@@ -65,7 +65,7 @@ class SigninForm extends Component {
 					<Form.Field>
 						{!!errors.general && <ErrorMessageInline text={errors.general} />}
 					</Form.Field>
-					<Button primary onClick={() => this.handleSubmit()}>Sign in</Button> <Button onClick={() => this.props.setReset()}>Reset password</Button>
+					<Button style={{backgroundColor:"#d15559", color:"#fff"}} primary onClick={() => this.handleSubmit()}>Sign in</Button> <Button onClick={() => this.props.setReset()}>Reset password</Button>
 					
 				</Form>		
 			</div>
