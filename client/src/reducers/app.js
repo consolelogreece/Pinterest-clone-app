@@ -4,11 +4,11 @@ export default (state = {}, action = {}) => {
 			return {...state, renderNewPostPopup: !state.renderNewPostPopup }
 
 		case "RECEIVED_POSTS":
-			if (!action.data) return {...state, currentPagePosts:{username:"", posts:"", totalposts:0}}; 
+			if (!action.data) return {...state, currentPagePosts:{userProfile:{}, posts:"", totalposts:0}}; 
 			return {...state, currentPagePosts:action.data}
 			
 		case "DELETE_POSTS_FROM_STORE":
-			return {...state, currentPagePosts:{username:"", posts:"", totalposts:0}}
+			return {...state, currentPagePosts:{userProfile:{}, posts:"", totalposts:0}}
 
 		case "REMOVE_POST_FROM_USER_POST_PAGE":
 			const newArray = state.currentPagePosts.posts.filter(post => post._id !== action.id);

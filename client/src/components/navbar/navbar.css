@@ -23,6 +23,7 @@
   display:flex;
   justify-content:center;
   font-family: 'Montserrat', sans-serif;
+  border-bottom: 1px dashed #fff;
 }
 #navbarlist > li {
   cursor: pointer;
@@ -51,8 +52,9 @@
   font-family: 'Montserrat', sans-serif;
 }
 #navbar_container--mobile {
-  display:none;
   list-style-type: none;
+  display: none;
+  background-color: #d15559;
 }
 #navbar_list--mobile > li {
   cursor: pointer;
@@ -61,7 +63,8 @@
   text-align: center;
   background-color: #d15559;
   color:#fff;
-  border-bottom:1px solid rgba(255,255,255,0.5);
+  border-bottom:1px dashed #fff;
+  box-sizing:border-box;
 
 }
 #navbar_list--mobile > li a,

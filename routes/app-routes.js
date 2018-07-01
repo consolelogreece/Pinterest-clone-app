@@ -47,7 +47,7 @@ router.get("/user", async (req, res) => {
 		const pageLimit = 12;
 		const id = req.query.id;
 		const page = req.query.page || 0;
-		const userPostsAndUsername = await User.findOne({_id:id}, {postIds:1, _id:0, username:1});
+		const userPostsAndUsername = await User.findOne({_id:id}, {postIds:1, _id:0, username:1, profile:1, followingIds:1, followersIds:1});
 
 		// if user doesn't exist
 		if (!userPostsAndUsername) {
@@ -67,7 +67,7 @@ router.get("/user", async (req, res) => {
 		const postDataArray = await Post.find({_id: {$in:userPostsAndUsername.postIds}}).limit(pageLimit).skip(skipCount)
 
 
-		res.status(200).json({type:'success', message:'Posts successfully retreived', data:{username:userPostsAndUsername.username, posts:postDataArray, totalPosts:userPostsAndUsername.postIds.length}, errors:null})
+		res.status(200).json({type:'success', message:'Posts successfully retreived', data:{userProfile:{ username: userPostsAndUsername.username,  bio:userPostsAndUsername.profile.bio, picture:userPostsAndUsername.profile.picture,  followingcount:userPostsAndUsername.followingIds.length, followerscount:userPostsAndUsername.followersIds.length }, posts:postDataArray, totalPosts:userPostsAndUsername.postIds.length}, errors:null})
 	} catch (err) {
 		console.log(err)
 		res.status(400).json({type:'error', message:'Something wen\'t wrong', data:null, errors:null})
@@ -187,7 +187,13 @@ router.post("/followuser", authCheck, (req, res) => {
 	try{
 		if (userdata.followingIds.indexOf(userId) === -1) {
 			
-			User.updateOne({_id:userdata._id}, {$push:{followingIds:userId}}).then(() => {
+			// add the id of the person the user wants to follow, to their 'followingIds array
+			const addUserIdToFollowing = User.updateOne({_id:userdata._id}, {$push:{followingIds:userId}})
+
+			// add the id of of the user to the person they want to follow's 'following' array
+			const addUserIdToFollowers = User.updateOne({_id:userId}, {$push:{followersIds:userdata._id.toString()}})
+
+			Promise.all([addUserIdToFollowing, addUserIdToFollowers]).then(() => {
 				res.status(200).json({type:"success", message:"User successfully follwed", data:null, errors:null});
 			}).catch(err => {
 				console.warn(err);
@@ -196,7 +202,12 @@ router.post("/followuser", authCheck, (req, res) => {
 
 			
 		} else {
-			User.updateOne({_id:userdata._id}, {$pull:{followingIds:userId}}).then(() => {
+			// remove the id of the person the user wants to follow, to their 'followingIds array
+			const removeUserIdFromFollowing = User.updateOne({_id:userdata._id}, {$pull:{followingIds:userId}})
+			// remove the id of the user to the person they want to follow's 'following' array
+			const removeUserIdToFollowers = User.updateOne({_id:userId}, {$pull:{followersIds:userdata._id}})
+			
+			Promise.all([removeUserIdFromFollowing, removeUserIdToFollowers]).then(() => {
 				res.status(200).json({type:"success", message:"User successfully unfollwed", data:null, errors:null});
 			}).catch(err => {
 				console.warn(err);

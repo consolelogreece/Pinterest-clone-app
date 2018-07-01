@@ -13,16 +13,18 @@ class navbar extends Component {
 				height:"0px",
 				padding:"0px",
 				visibility:"hidden",
-				fontSize:"0px"
+				fontSize:"0px",
+				border:"0px",
+				margin:"0px"
 			}
 		}
 	}
 
 	toggleMenu = () => {
 		if (!this.state.isMenuOpen) {
-			this.setState({isMenuOpen: true, style:{height:"50px",   padding: '15px 0px 10px 0px', visibility:"visible", fontSize:"1em"}})
+			this.setState({isMenuOpen: true, style:{height:"50px", padding: '15px 0px 10px 0px', visibility:"visible", fontSize:"1em"}})
 		} else {
-			this.setState({isMenuOpen: false, style:{height:"0px",  padding:"0px", visibility:"hidden", fontSize:"0px"}})
+			this.setState({isMenuOpen: false, style:{height:"0px", border:"0px", margin:"0px", padding:"0px", visibility:"hidden", fontSize:"0px"}})
 		}
 	}
 
@@ -41,10 +43,10 @@ class navbar extends Component {
 					<nav>
 					  <div id="navbarcontainer">
 					    <ul id="navbarlist">
-					      <li onClick={() => this.props.history.push("/")} style={{"display":"inline-block"}} >Home</li>
-					      <li onClick={() => this.props.history.push("/feed")} style={{"display":"inline-block"}}>Feed</li>
-					      <li onClick={() => this.props.history.push("/profile")} style={{"display":"inline-block"}}>Profile</li>
-					      <li onClick={() => this.props.history.push("/settings")} style={{"display":"inline-block"}}>Settings</li>
+					      <li onClick={() => this.props.history.push("/")} style={{"display":"block"}} >Home</li>
+					      <li onClick={() => this.props.history.push("/feed")} style={{"display":"block"}}>Feed</li>
+					      <li onClick={() => this.props.history.push("/profile")} style={{"display":"block"}}>Profile</li>
+					      <li onClick={() => this.props.history.push("/settings")} style={{"display":"block"}}>Settings</li>
 					      <li onClick={() => this.props.signOut().then(() => this.props.history.push("/signin"))}>Sign out</li>
 					    </ul>
 					  </div>

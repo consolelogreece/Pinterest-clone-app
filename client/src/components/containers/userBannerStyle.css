@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+body {
+  margin:0;
+  padding:0;
+}
+
+
+.banner--mobile{
+  width:100%;
+  height:100%;
+  font-family: 'Open Sans', sans-serif;
+  flex-direction: column;
+}
+.banner-wrapper--mobile{
+  width: 100%; 
+  background-color:#d15559;
+  width:100%;
+  height:450px;
+  padding:8px;
+  max-width:1200px /* MAX WIDTH OF MY CURRENT PROJECT IN WHICH THIS WILL BE IMPLEMENTED*/
+}
+.pic-box--mobile {
+  margin:0 auto;
+  border-radius:50%;
+  border-style: solid !important;
+  border-color: #fff !important;
+  border-width: 2px !important;
+  height:200px;
+  width:200px;
+  position:relative;
+  overflow: hidden;
+
+}
+
+.picture-element--mobile {
+  display: block;
+  margin: 0 auto;
+  height:200px;
+  width:200px;
+ 
+}
+
+.info-box {
+  flex-direction: column;
+  flex:14;
+  justify-content: center;
+  margin-top:30px;
+} 
+
+.info-element--mobile {
+  flex :1;
+  text-align:center;
+  font-size:1.3vw;
+  color:#fff;
+  margin-top:1vw;
+}
+
+.stat-element--mobile {
+  flex :1;
+  text-align:center;
+  font-size:1rem;
+  color:#fff;
+  margin-top:1vw;
+}
+
+.stat-box--mobile {
+  flex:2;
+  display:flex;
+  justify-content: center;
+}
+
+.bio-element--mobile {
+  flex: 2;
+  font-size:0.9rem;
+  text-align:center;
+  color:#fff;
+    margin-top:30px;
+
+}
+  .banner-wrapper{
+    display:none;
+    width: 100%; 
+    background-color:#d15559;
+    width:100%;
+    height:200px;
+    padding:8px;
+    max-width:1200px /* MAX WIDTH OF MY CURRENT PROJECT IN WHICH THIS WILL BE IMPLEMENTED*/
+  }
+
+#username--mobile, #username {
+  margin-top:1vw;
+}
+
+@media only screen and (min-width:768px) {
+   .banner{
+    display:flex;
+    width:100%;
+    height:100%;
+    font-family: 'Open Sans', sans-serif;
+  }
+  .banner-wrapper--mobile {
+    display:none;
+  }
+  .banner-wrapper{
+    display:flex;
+    width: 100%; 
+    background-color:#d15559;
+    width:100%;
+    height:200px;
+    padding:8px;
+    max-width:1200px;
+  }
+  .pic-box {
+    border-radius:50%;
+    border-style: solid !important;
+    border-color: #fff !important;
+    border-width: 2px !important;
+    height:180px;
+    width:180px;
+    position:relative;
+    overflow: hidden;
+  }
+
+  .picture-element {
+    display: block;
+    margin: 0 auto;
+    height:180px;
+    width:180px;
+  }
+
+  .info-box {
+    flex-direction: column;
+    flex:14;
+    justify-content: center;
+    align-items:center;
+  } 
+
+  .info-element {
+    flex :1;
+    text-align:center;
+    font-size:1.3vw;
+    color:#fff;
+    margin-top:1vw;
+  }
+
+  .stat-element {
+    flex :1;
+    text-align:center;
+    font-size:1rem;
+    color:#fff;
+    margin-top:1vw;
+  }
+
+  .stat-box {
+    flex:2;
+    display:flex;
+    justify-content: center;
+  }
+
+  .bio-element {
+    flex: 2;
+    font-size:0.9rem;
+    color:#fff;
+    text-align:center;
+    margin-top:15px;
+
+
+
+  }
+}

@@ -50,6 +50,11 @@ const addToDatabase = (credentials, passwordHash, collection) => {
 		likedPostIds:[],
 		sharedPostIds:[],
 		followingIds:[],
+		followersIds:[],
+		profile: {
+			bio:"",
+			picture:""
+		},
 		resetHash:null
 	}
 

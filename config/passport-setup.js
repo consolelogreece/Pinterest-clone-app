@@ -25,7 +25,6 @@ passport.use(
 
 		//check if user exists already
 		User.findOne({platform:'google', platformId:profile.id}).then((currentUser) => {
-
 			//if true, user already in db
 			if (currentUser){
 				done(null, currentUser)
@@ -37,7 +36,14 @@ passport.use(
 					postIds:[],
 					likedPostIds:[],
 					sharedPostIds:[],
-					followingIds:[]
+					followingIds:[],
+					followersIds:[],
+					profile:{
+						bio:"",
+						picture:profile._json.image.url
+					},
+					nestatesta:"1212"
+
 				}).save().then((newUser) => {
 					done(null, newUser)
 				})

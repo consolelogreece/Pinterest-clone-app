@@ -8,6 +8,13 @@ class profilepage extends Component {
 			<div>
 				<h1>My Profile</h1>
 				
+				view posts
+
+				view shares
+
+				view followers
+
+				view likes
 
 
 			</div>
