@@ -43,7 +43,9 @@ class modifyprofileform extends Component {
 				console.log("okok")
 				this.setState({success:true})
 			}).catch(() => {
-				console.log("error")
+				this.setState({errors:{
+					general:"Something went wrong, please try again soon..."
+				}})
 			})
 		}
 	}
@@ -76,6 +78,7 @@ class modifyprofileform extends Component {
 				    	{errors.bio && <div style={{"margin":"0 auto 5px auto", textAlign:"center"}}><ErrorMessageInline style={{"margin":"0 auto", textAlign:"center"}} text={errors.bio}/></div>}
 				  	</div>
 				  	{success && <div style={{"margin":"0 auto 5px auto", textAlign:"center"}}><SuccessMessageInline style={{"margin":"0 auto", textAlign:"center"}} text="Profile changes saved succesfully"/></div>}
+				  	{errors.general && <div style={{"margin":"0 auto 5px auto", textAlign:"center"}}><ErrorMessageInline style={{"margin":"0 auto", textAlign:"center"}} text={errors.general}/></div>}
 				  	<Button onClick={() => this.handleSubmit()} style={{backgroundColor:"#d15559", color:"#fff", "width":"30%", margin:"0 auto"}}>Save changes</Button>
 
 				</div>

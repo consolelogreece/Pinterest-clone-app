@@ -106,12 +106,12 @@ router.post("/editprofile", authCheck, (req, res) => {
 	const profile = req.body.new_profile
 	const user_id = req.user._id
 
-	if (profile.bio.length > 100 || !validator.isURL(profile.picture)){
+	if (profile.bio.length > 100 || (!validator.isURL(profile.picture) && profile.picture.length > 0)){
 		res.status(400).json({type:'error', message:'Something wen\'t wrong', data:null, errors:null});
 		return;
 	}   
 
-	User.updateOne({_id:user_id}, {$sjjjjjjjjet:{profile:{bio:profile.bio, picture:profile.picture}}}).then(()=>{
+	User.updateOne({_id:user_id}, {$set:{profile:{bio:profile.bio, picture:profile.picture}}}).then(()=>{
 		res.status(200).json({type:"success", message:"Profile changed successfully", data:null, errors:null})
 	}).catch(err => {
 		console.log(err);
