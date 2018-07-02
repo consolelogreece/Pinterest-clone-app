@@ -1,6 +1,8 @@
 import express from 'express';
 import { Post } from '../models/post-model';
 import { User } from '../models/user-model';
+import validator from 'validator';
+
 const ObjectID = require('mongodb').ObjectID;
 
 const router = express.Router();
@@ -21,95 +23,102 @@ router.post('/newpost', authCheck, (req, res) => {
 	const data = req.user;
 	const { title, imgurl } = req.body.data;
 
-	try {
-		const newid = new ObjectID(); // add this id to authors post id list.
-		const addpost = new Post({_id:newid, authorUsername:data.username, authorId:data.id, title:title, imageUrl:imgurl, userLikeIds:[], userShareIds:[], creationDate: new Date}).save();
-		const addPostIdToUser = User.update({_id:data.id}, {$push:{postIds:{$each:[newid.toString()], $position:0}}})
+	
+	const newid = new ObjectID(); // add this id to authors post id list.
+	const addpost = new Post({_id:newid, authorUsername:data.username, authorId:data.id, title:title, imageUrl:imgurl, userLikeIds:[], userShareIds:[], creationDate: new Date}).save();
+	const addPostIdToUser = User.update({_id:data.id}, {$push:{postIds:{$each:[newid.toString()], $position:0}}})
 
 
-		Promise.all([addpost, addPostIdToUser]).then(() => {
-			res.status(200).json({type:'success', message:'Your post has been successfully created', data:{postId:newid}, errors:null})
-		})
-		.catch(err => {
-			console.log(err);
-			res.status(400).json({type:'error', message:'Something wen\'t wrong', data:null, errors:null})
-		});
-
-	} catch (err) {
+	Promise.all([addpost, addPostIdToUser]).then(() => {
+		res.status(200).json({type:'success', message:'Your post has been successfully created', data:{postId:newid}, errors:null})
+	})
+	.catch(err => {
 		console.log(err);
 		res.status(400).json({type:'error', message:'Something wen\'t wrong', data:null, errors:null})
-	}	
-	
+	});
+
+
 })
 
 router.get("/user", async (req, res) => {
-	try {
-		const pageLimit = 12;
-		const id = req.query.id;
-		const page = req.query.page || 0;
-		const userPostsAndUsername = await User.findOne({_id:id}, {postIds:1, _id:0, username:1, profile:1, followingIds:1, followersIds:1});
 
-		// if user doesn't exist
-		if (!userPostsAndUsername) {
-			res.status(400).json({type:'error', message:'User doesn\'t exist', data:null, errors:null})
-			return;
-		}
+	const pageLimit = 12;
+	const id = req.query.id;
+	const page = req.query.page || 0;
+	const userPostsAndUsername = await User.findOne({_id:id}, {postIds:1, _id:0, username:1, profile:1, followingIds:1, followersIds:1});
 
-		let skipCount = (function(pageLimit, totalPosts, pageno){
-			let skip = pageLimit * page;
-
-			if (skip > totalPosts) return (totalPosts - (totalPosts % pageLimit))
-			return skip
-		})(pageLimit, userPostsAndUsername.postIds.length, page);
-
-
-
-		const postDataArray = await Post.find({_id: {$in:userPostsAndUsername.postIds}}).limit(pageLimit).skip(skipCount)
-
-
-		res.status(200).json({type:'success', message:'Posts successfully retreived', data:{userProfile:{ username: userPostsAndUsername.username,  bio:userPostsAndUsername.profile.bio, picture:userPostsAndUsername.profile.picture,  followingcount:userPostsAndUsername.followingIds.length, followerscount:userPostsAndUsername.followersIds.length }, posts:postDataArray, totalPosts:userPostsAndUsername.postIds.length}, errors:null})
-	} catch (err) {
-		console.log(err)
-		res.status(400).json({type:'error', message:'Something wen\'t wrong', data:null, errors:null})
+	// if user doesn't exist
+	if (!userPostsAndUsername) {
+		res.status(400).json({type:'error', message:'User doesn\'t exist', data:null, errors:null})
+		return;
 	}
-	
+
+	let skipCount = (function(pageLimit, totalPosts, pageno){
+		let skip = pageLimit * page;
+
+		if (skip > totalPosts) return (totalPosts - (totalPosts % pageLimit))
+		return skip
+	})(pageLimit, userPostsAndUsername.postIds.length, page);
+
+
+
+	const postDataArray = await Post.find({_id: {$in:userPostsAndUsername.postIds}}).limit(pageLimit).skip(skipCount)
+
+
+	res.status(200).json({type:'success', message:'Posts successfully retreived', data:{userProfile:{ username: userPostsAndUsername.username,  bio:userPostsAndUsername.profile.bio, picture:userPostsAndUsername.profile.picture,  followingcount:userPostsAndUsername.followingIds.length, followerscount:userPostsAndUsername.followersIds.length }, posts:postDataArray, totalPosts:userPostsAndUsername.postIds.length}, errors:null})
+
+
 });
 
 router.get("/feed", authCheck,  async (req, res) => {
-	try {
-		const pageLimit = 12;
-		const page = req.query.page || 0;
-		const data = req.user;
+	const pageLimit = 12;
+	const page = req.query.page || 0;
+	const data = req.user;
 
-		const userFollowingData = await User.find({_id:{$in:data.followingIds}})
+	const userFollowingData = await User.find({_id:{$in:data.followingIds}})
 
-		let allIds = [];
+	let allIds = [];
 
-		for (let i = 0; i < userFollowingData.length; i++){
-			allIds = allIds.concat([...userFollowingData[i].postIds, ...userFollowingData[i].sharedPostIds])
-		}
-
-		const uniqueIdArray =  allIds.filter((item, pos, ar) => ar.indexOf(item) === pos);
-
-		const skipCount = (function(pageLimit, totalPosts, pageno){
-			let skip = pageLimit * page;
-
-			if (skip > totalPosts) return (totalPosts - (totalPosts % pageLimit))
-			return skip
-		})(pageLimit, allIds.size, page);
-
-		const posts = await Post.find({_id:{$in:allIds}}).sort({creationDate:-1}).limit(pageLimit).skip(skipCount);
-
-		res.status(200).json({type:'success', message:'Feed successfully retreived', data:{posts:posts, totalPosts:uniqueIdArray.length}, errors:null})
-		
-	} catch (err) {
-		console.log(err)
-		res.status(400).json({type:'error', message:'Something wen\'t wrong', data:null, errors:null})
+	for (let i = 0; i < userFollowingData.length; i++){
+		allIds = allIds.concat([...userFollowingData[i].postIds, ...userFollowingData[i].sharedPostIds])
 	}
+
+	const uniqueIdArray =  allIds.filter((item, pos, ar) => ar.indexOf(item) === pos);
+
+	const skipCount = (function(pageLimit, totalPosts, pageno){
+		let skip = pageLimit * page;
+
+		if (skip > totalPosts) return (totalPosts - (totalPosts % pageLimit))
+		return skip
+	})(pageLimit, allIds.size, page);
+
+	const posts = await Post.find({_id:{$in:allIds}}).sort({creationDate:-1}).limit(pageLimit).skip(skipCount);
+
+	res.status(200).json({type:'success', message:'Feed successfully retreived', data:{posts:posts, totalPosts:uniqueIdArray.length}, errors:null})
+	
+	
 	
 });
 
 
+
+router.post("/editprofile", authCheck, (req, res) => {
+	const profile = req.body.new_profile
+	const user_id = req.user._id
+
+	if (profile.bio.length > 100 || !validator.isURL(profile.picture)){
+		res.status(400).json({type:'error', message:'Something wen\'t wrong', data:null, errors:null});
+		return;
+	}   
+
+	User.updateOne({_id:user_id}, {$sjjjjjjjjet:{profile:{bio:profile.bio, picture:profile.picture}}}).then(()=>{
+		res.status(200).json({type:"success", message:"Profile changed successfully", data:null, errors:null})
+	}).catch(err => {
+		console.log(err);
+		res.status(400).json({type:'error', message:'Something wen\'t wrong', data:null, errors:null})
+	})
+
+})
 
 
 // Like/share/follow are essentially toggle switches. this helps minimise bugs/duplications //////////////////////////////////////////
@@ -118,64 +127,57 @@ router.get("/feed", authCheck,  async (req, res) => {
 router.post("/likepost", authCheck, (req, res) => {
 	const postId = req.body.postId;
 	const userdata = req.user;
-	try{
-		if (userdata.likedPostIds.indexOf(postId) === -1) {
-			
-				const addUserIdToPost = Post.updateOne({_id:postId}, {$push:{userLikeIds:userdata._id.toString()}})
-				const addPostIdToUserLikes = User.update({_id:userdata.id}, {$push:{likedPostIds:postId}})
-				Promise.all([addUserIdToPost, addPostIdToUserLikes]).then(() => {
-					res.status(200).json({type:"success", message:"Post successfully liked", data:null, errors:null});
-				}).catch(err => {
-					console.warn(err)
-					res.status(400).json({type:"failure", message:"Something wen't wrong", data:null, errors:null});
-				});	
-		} else {
-				const removeUserIdFromPost = Post.updateOne({_id:postId}, {$pull:{userLikeIds:userdata._id}})
-				const removedPostIdFromUserLikes = User.update({_id:userdata.id}, {$pull:{likedPostIds:postId}})
-				Promise.all([removeUserIdFromPost, removedPostIdFromUserLikes]).then(() => {
-					res.status(200).json({type:"success", message:"Post successfully unliked", data:null, errors:null});
-				}).catch(err => {
-					console.warn(err)
-					res.status(400).json({type:"failure", message:"Something went wrong", data:null, errors:null});
-				});
-			
-		}
-	} catch (err) {
-		console.warn(err)
-		res.status(400).json({type:"failure", message:"Something wen't wrong", data:null, errors:null});
+
+	if (userdata.likedPostIds.indexOf(postId) === -1) {
+		
+			const addUserIdToPost = Post.updateOne({_id:postId}, {$push:{userLikeIds:userdata._id.toString()}})
+			const addPostIdToUserLikes = User.update({_id:userdata.id}, {$push:{likedPostIds:postId}})
+			Promise.all([addUserIdToPost, addPostIdToUserLikes]).then(() => {
+				res.status(200).json({type:"success", message:"Post successfully liked", data:null, errors:null});
+			}).catch(err => {
+				console.warn(err)
+				res.status(400).json({type:"failure", message:"Something wen't wrong", data:null, errors:null});
+			});	
+	} else {
+			const removeUserIdFromPost = Post.updateOne({_id:postId}, {$pull:{userLikeIds:userdata._id}})
+			const removedPostIdFromUserLikes = User.update({_id:userdata.id}, {$pull:{likedPostIds:postId}})
+			Promise.all([removeUserIdFromPost, removedPostIdFromUserLikes]).then(() => {
+				res.status(200).json({type:"success", message:"Post successfully unliked", data:null, errors:null});
+			}).catch(err => {
+				console.warn(err)
+				res.status(400).json({type:"failure", message:"Something went wrong", data:null, errors:null});
+			});
+		
 	}
+
 
 });
 
 router.post("/sharepost", authCheck,  (req, res) => {
 	const postId = req.body.postId;
 	const userdata = req.user;
-	try{
-		if (userdata.sharedPostIds.indexOf(postId) === -1) {
-			
-				const addUserIdToPost = Post.updateOne({_id:postId}, {$push:{userShareIds:userdata._id.toString()}})
-				const addPostIdToUserShare = User.update({_id:userdata.id}, {$push:{sharedPostIds:postId}})
 
-				Promise.all([addUserIdToPost, addPostIdToUserShare]).then(() => {
-					res.status(200).json({type:"success", message:"Post successfully shared", data:null, errors:null});
-				}).catch(err => {
-					console.warn(err)
-					res.status(400).json({type:"failure", message:"Something wen't wrong", data:null, errors:null});
-				});	
-		} else {
-				const removeUserIdFromPost = Post.updateOne({_id:postId}, {$pull:{userShareIds:userdata._id}})
-				const removedPostIdFromUserShares = User.update({_id:userdata.id}, {$pull:{sharedPostIds:postId}})
-				Promise.all([removeUserIdFromPost, removedPostIdFromUserShares]).then(() => {
-					res.status(200).json({type:"success", message:"Post successfully unshared", data:null, errors:null});
-				}).catch(err => {
-					console.warn(err)
-					res.status(400).json({type:"failure", message:"Something went wrong", data:null, errors:null});
-				});
-			
-		}
-	} catch (err) {
-		console.warn(err)
-		res.status(400).json({type:"failure", message:"Something wen't wrong", data:null, errors:null});
+	if (userdata.sharedPostIds.indexOf(postId) === -1) {
+		
+		const addUserIdToPost = Post.updateOne({_id:postId}, {$push:{userShareIds:userdata._id.toString()}})
+		const addPostIdToUserShare = User.update({_id:userdata.id}, {$push:{sharedPostIds:postId}})
+
+		Promise.all([addUserIdToPost, addPostIdToUserShare]).then(() => {
+			res.status(200).json({type:"success", message:"Post successfully shared", data:null, errors:null});
+		}).catch(err => {
+			console.warn(err)
+			res.status(400).json({type:"failure", message:"Something wen't wrong", data:null, errors:null});
+		});	
+	} else {
+		const removeUserIdFromPost = Post.updateOne({_id:postId}, {$pull:{userShareIds:userdata._id}})
+		const removedPostIdFromUserShares = User.update({_id:userdata.id}, {$pull:{sharedPostIds:postId}})
+		Promise.all([removeUserIdFromPost, removedPostIdFromUserShares]).then(() => {
+			res.status(200).json({type:"success", message:"Post successfully unshared", data:null, errors:null});
+		}).catch(err => {
+			console.warn(err)
+			res.status(400).json({type:"failure", message:"Something went wrong", data:null, errors:null});
+		});
+	
 	}
 
 });
@@ -184,41 +186,38 @@ router.post("/sharepost", authCheck,  (req, res) => {
 router.post("/followuser", authCheck, (req, res) => {
 	const userId = req.body.userId;
 	const userdata = req.user;
-	try{
-		if (userdata.followingIds.indexOf(userId) === -1) {
-			
-			// add the id of the person the user wants to follow, to their 'followingIds array
-			const addUserIdToFollowing = User.updateOne({_id:userdata._id}, {$push:{followingIds:userId}})
 
-			// add the id of of the user to the person they want to follow's 'following' array
-			const addUserIdToFollowers = User.updateOne({_id:userId}, {$push:{followersIds:userdata._id.toString()}})
+	if (userdata.followingIds.indexOf(userId) === -1) {
+		
+		// add the id of the person the user wants to follow, to their 'followingIds array
+		const addUserIdToFollowing = User.updateOne({_id:userdata._id}, {$push:{followingIds:userId}})
 
-			Promise.all([addUserIdToFollowing, addUserIdToFollowers]).then(() => {
-				res.status(200).json({type:"success", message:"User successfully follwed", data:null, errors:null});
-			}).catch(err => {
-				console.warn(err);
-				res.status(400).json({type:"failure", message:"Something wen't wrong", data:null, errors:null});
-			});
+		// add the id of of the user to the person they want to follow's 'following' array
+		const addUserIdToFollowers = User.updateOne({_id:userId}, {$push:{followersIds:userdata._id.toString()}})
 
-			
-		} else {
-			// remove the id of the person the user wants to follow, to their 'followingIds array
-			const removeUserIdFromFollowing = User.updateOne({_id:userdata._id}, {$pull:{followingIds:userId}})
-			// remove the id of the user to the person they want to follow's 'following' array
-			const removeUserIdToFollowers = User.updateOne({_id:userId}, {$pull:{followersIds:userdata._id}})
-			
-			Promise.all([removeUserIdFromFollowing, removeUserIdToFollowers]).then(() => {
-				res.status(200).json({type:"success", message:"User successfully unfollwed", data:null, errors:null});
-			}).catch(err => {
-				console.warn(err);
-				res.status(400).json({type:"failure", message:"Something wen't wrong", data:null, errors:null});
-			});
-			
-		}
-	} catch (err) {
-		console.warn(err)
-		res.status(400).json({type:"failure", message:"Something wen't wrong", data:null, errors:null});
+		Promise.all([addUserIdToFollowing, addUserIdToFollowers]).then(() => {
+			res.status(200).json({type:"success", message:"User successfully follwed", data:null, errors:null});
+		}).catch(err => {
+			console.warn(err);
+			res.status(400).json({type:"failure", message:"Something wen't wrong", data:null, errors:null});
+		});
+
+		
+	} else {
+		// remove the id of the person the user wants to follow, to their 'followingIds array
+		const removeUserIdFromFollowing = User.updateOne({_id:userdata._id}, {$pull:{followingIds:userId}})
+		// remove the id of the user to the person they want to follow's 'following' array
+		const removeUserIdToFollowers = User.updateOne({_id:userId}, {$pull:{followersIds:userdata._id}})
+		
+		Promise.all([removeUserIdFromFollowing, removeUserIdToFollowers]).then(() => {
+			res.status(200).json({type:"success", message:"User successfully unfollwed", data:null, errors:null});
+		}).catch(err => {
+			console.warn(err);
+			res.status(400).json({type:"failure", message:"Something wen't wrong", data:null, errors:null});
+		});
+		
 	}
+
 
 });
 
@@ -226,25 +225,22 @@ router.post("/deletepost", authCheck, (req, res) => {
 	const postId = req.body.postId;
 	const userdata = req.user;
 	console.log(postId)
-	try{
 
-		// remove post id from the user's "postIds" array.
-		const removeIdFromPostArray = User.updateOne({_id:userdata._id}, {$pull:{postIds:postId}})
 
-		// remove post. Both id's are important, as this ensures the post will only be deleted if it belongs to the requesting user.
-		const removePost = Post.deleteOne({_id:postId, authorId:userdata._id});
+	// remove post id from the user's "postIds" array.
+	const removeIdFromPostArray = User.updateOne({_id:userdata._id}, {$pull:{postIds:postId}})
 
-		Promise.all([removeIdFromPostArray, removePost]).then(() => {
-			res.status(200).json({type:"success", message:"Post successfully deleted", data:null, errors:null})
-		}).catch(err => {
-			console.warn(err)
-			res.status(400).json({type:"failure", message:"Something wen't wrong", data:null, errors:null});
-		})
+	// remove post. Both id's are important, as this ensures the post will only be deleted if it belongs to the requesting user.
+	const removePost = Post.deleteOne({_id:postId, authorId:userdata._id});
 
-	} catch (err) {
+	Promise.all([removeIdFromPostArray, removePost]).then(() => {
+		res.status(200).json({type:"success", message:"Post successfully deleted", data:null, errors:null})
+	}).catch(err => {
 		console.warn(err)
 		res.status(400).json({type:"failure", message:"Something wen't wrong", data:null, errors:null});
-	}
+	})
+
+	
 
 });
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

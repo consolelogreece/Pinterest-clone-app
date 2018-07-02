@@ -66,7 +66,7 @@ class userpostpage extends Component {
 	render(){
 		return(
 			<div>
-			<UserBanner userProfile={this.props.userProfile} />
+				<UserBanner userProfile={this.props.userProfile} />
 				<CardContainer {...this.props} populatePostArray={this.populatePostArray} handlePageChange={this.handlePageChange} />
 			</div>
 		)

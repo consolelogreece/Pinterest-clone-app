@@ -54,7 +54,6 @@ class changepasswordform extends Component {
 
 	render(){
 		const {data, loading, errors, success} = this.state;
-		console.log(!!errors.general)
 		return(
 			<div>
 				<div style={{margin:'20px 0px', borderBottom:"1px solid #000"}}>	

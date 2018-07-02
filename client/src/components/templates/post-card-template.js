@@ -43,7 +43,7 @@ const card = props => {
 		    	<Card.Meta>{"Posted by "} <a href={`/user?id=${props.authorId}`}>{props.username}</a></Card.Meta>
 		    }
 		    	
-			    <Card.Meta>{`${moment(props.creationDate).format("MMM do YYYY, h:mm a")}`}</Card.Meta>
+			    <Card.Meta>{`${moment(props.creationDate).format("MMM Do YYYY, h:mm a")}`}</Card.Meta>
 		    </Card.Content>
 		</Card>
 		//aa

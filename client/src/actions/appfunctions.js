@@ -85,3 +85,10 @@ export const deletePost = postId => dispatch => {
 	});
 }
 
+export const editProfile = new_profile => dispatch => {
+	return axios.post("/app/editprofile", {new_profile}).then(() => {
+		dispatch({type:"PROFILE_EDITED", data:new_profile})
+	})
+}
+
+

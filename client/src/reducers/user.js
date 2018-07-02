@@ -38,7 +38,8 @@ export default (state = {}, action = {}) => {
 			return {...state, postIds:newPostIdArray}	
 
 
-
+		case "PROFILE_EDITED":
+			return {...state, userProfile:{...state.userProfile, bio:action.data.bio, picture:action.data.picture}}
 
 
 		

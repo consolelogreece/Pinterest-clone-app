@@ -13,6 +13,7 @@
 }
 
 #navbarcontainer {
+    border-top: 1px dashed #fff;
   list-style-type: none;
   display: block;
   background-color: #d15559;
@@ -46,12 +47,13 @@
 }
 #navbar_list--mobile {
   padding-left:0 !important;
-  display: inline-block;
+  display: block;
   margin:0 !important;
   width:100%;
   font-family: 'Montserrat', sans-serif;
 }
 #navbar_container--mobile {
+  border-top: 1px dashed #fff;
   list-style-type: none;
   display: none;
   background-color: #d15559;

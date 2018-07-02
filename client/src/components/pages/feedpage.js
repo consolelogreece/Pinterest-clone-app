@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { getFeed, deletePostsFromStore, sharePost, unsharePost, likePost, unlikePost, follow, unfollow, deletePost } from '../../actions/appfunctions';
 
 import CardContainer from '../containers/cardContainer';
+import UserBanner from '../containers/userBanner'
 
 import Masonry from 'react-masonry-component';
 import {Icon} from 'semantic-ui-react';
@@ -58,7 +59,10 @@ class feedpage extends Component {
 
 	render(){
 		return(
-			<CardContainer {...this.props} populatePostArray={this.populatePostArray} handlePageChange={this.handlePageChange} />
+			<div>
+				<UserBanner userProfile={this.props.userProfile} />
+				<CardContainer {...this.props} populatePostArray={this.populatePostArray} handlePageChange={this.handlePageChange} />
+			</div>
 		)
 	}
 }
@@ -105,7 +109,8 @@ const mapStateToProps = state => {
 		sharedPostIds:state.user.sharedPostIds,
 		followingIds:state.user.followingIds,
 		isAuthenticated:state.user.isAuthenticated,
-		totalPosts:state.app.currentPagePosts.totalPosts
+		totalPosts:state.app.currentPagePosts.totalPosts,
+		userProfile:state.user.userProfile
 	}
 }
 

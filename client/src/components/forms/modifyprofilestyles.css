@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+
+
+.modify-profile-form {
+  display:flex;
+  max-width:1200px;
+  flex-direction: column;
+  font-family: 'Open Sans', sans-serif;
+  margin-bottom: 10px;
+}
+
+  .modify-pic-box {
+  	flex:1;
+   	width:100%;
+    margin:0 auto;
+    margin-bottom:5px;
+    padding-bottom:15px;
+
+  }
+
+ .modify-picture-element-container {
+
+    border-radius:50%;
+    border-style: solid !important;
+    border-color: #d15559 !important;
+    border-width: 4px !important;
+    height:200px;
+    width:200px;
+    position:relative;
+    overflow: hidden;
+    margin:0 auto 10px auto;
+
+
+  }
+
+
+  .modify-profile-labels {
+  	margin: 10px auto 0 auto;
+  	text-align:center;
+  	display: block;
+
+  }
+
+
+  .modify-picture-element {
+    display: block;
+    height:200px;
+    width:200px;
+  }
+
+.modify-picture-input{
+	margin:0 auto;
+	border:2px solid #d15559;
+	text-align:center;
+	border-radius: 6px;
+
+}
+input:focus {
+	  outline: 0;
+	  box-shadow: none;
+}
+
+.modify-element-form {
+	width:80%;
+	margin:0 auto;
+	text-align:center;
+
+}
+
+.modify-bio-box {
+	width:80%;
+	text-align:center;
+	margin:0 auto 10px auto;
+}
+
+
