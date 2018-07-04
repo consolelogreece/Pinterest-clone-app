@@ -5,7 +5,7 @@ import homepage from './components/pages/homepage';
 import signinpage from './components/pages/signinpage';
 import signuppage from './components/pages/signuppage';
 import resetpasswordpage from './components/pages/resetpasswordpage';
-
+import myfollowinglistpage from './components/pages/myfollowinglistpage';
 import settingspage from './components/pages/settingspage';
 import profilepage from './components/pages/profilepage';
 
@@ -73,18 +73,19 @@ class App extends Component {
       <div style={{minHeight:"100vh",  paddingBottom: '80px', position: 'relative', 'wordWrap':'break-word','margin':'0 auto', 'width': '100%', maxWidth:'1200px'}}>
         {/*New post form implemented here, so can be rendered anywhere in the app.*/}
         <Transition animation='scale' duration={175} visible={this.props.renderNewPostPopup}>
-          <div style={{'width': '90%', 'position': 'fixed', 'left': '50%', 'marginLeft': '-45%',marginTop:"20px", maxHeight:"600px"}}> 
+          <div style={{ zIndex:'99', 'width': '90%', 'position': 'fixed', 'left': '50%', 'marginLeft': '-45%',marginTop:"20px", maxHeight:"600px"}}> 
             <Newpostform redirect_to_login={this.redirect_to_login} isAuthenticated={this.props.isAuthenticated} submit={this.submitpost} closeform={this.props.onToggleClick} />
           </div>
         </Transition>
 
-        <Navbar history={this.props.history} signOut={this.props.signOut} isAuthenticated={this.props.isAuthenticated} />
+        <Navbar togglepostpopup={this.props.onToggleClick} history={this.props.history} signOut={this.props.signOut} isAuthenticated={this.props.isAuthenticated} />
 
   	    <Switch>
   	    	<NotLoggedInOnlyRoute isAuthenticated={this.props.isAuthenticated} path='/signin' exact component={signinpage} />
           <NotLoggedInOnlyRoute isAuthenticated={this.props.isAuthenticated} path='/signup' exact component={signuppage} />
           <NotLoggedInOnlyRoute isAuthenticated={this.props.isAuthenticated} path='/resetpassword' component={resetpasswordpage} />
           <PrivateRoute isAuthenticated={this.props.isAuthenticated} path='/feed' component={feedpage} />
+          <PrivateRoute isAuthenticated={this.props.isAuthenticated} path='/following' component={myfollowinglistpage} />
           <PrivateRoute isAuthenticated={this.props.isAuthenticated} path='/profile' component={profilepage} />
           <PrivateRoute isAuthenticated={this.props.isAuthenticated} path='/settings' component={settingspage} />
           <Route isAuthenticated={this.props.isAuthenticated} path='/user' component={userpostpage} />

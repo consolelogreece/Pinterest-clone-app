@@ -13,7 +13,8 @@ class profilepage extends Component {
 				<h1>My Profile</h1>
 				<Modifyprofileform editProfile={this.props.editProfile} userProfile={this.props.userProfile} />
 				<div style={{borderTop:"1px solid #000", paddingTop:"5px",  "margin":"5px auto 5px auto", textAlign:"center"}}>
-					<Button onClick={() => this.props.history.push("/user?id=" + this.props.userId)}>My posts</Button><Button>My following list</Button>
+					<Button onClick={() => this.props.history.push("/user?id=" + this.props.userId)}>My posts</Button>
+					<Button onClick={() => this.props.history.push("/following")}>My following list</Button>
 				</div>
 			</div>
 		)

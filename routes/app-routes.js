@@ -23,7 +23,6 @@ router.post('/newpost', authCheck, (req, res) => {
 	const data = req.user;
 	const { title, imgurl } = req.body.data;
 
-	
 	const newid = new ObjectID(); // add this id to authors post id list.
 	const addpost = new Post({_id:newid, authorUsername:data.username, authorId:data.id, title:title, imageUrl:imgurl, userLikeIds:[], userShareIds:[], creationDate: new Date}).save();
 	const addPostIdToUser = User.update({_id:data.id}, {$push:{postIds:{$each:[newid.toString()], $position:0}}})
@@ -36,70 +35,76 @@ router.post('/newpost', authCheck, (req, res) => {
 		console.log(err);
 		res.status(400).json({type:'error', message:'Something wen\'t wrong', data:null, errors:null})
 	});
-
-
 })
 
 router.get("/user", async (req, res) => {
 
-	const pageLimit = 12;
-	const id = req.query.id;
-	const page = req.query.page || 0;
-	const userPostsAndUsername = await User.findOne({_id:id}, {postIds:1, _id:0, username:1, profile:1, followingIds:1, followersIds:1});
+	try {
+		const pageLimit = 12;
+		const id = req.query.id;
+		const page = req.query.page || 0;
+		const userPostsAndUsername = await User.findOne({_id:id}, {postIds:1, _id:0, username:1, profile:1, followingIds:1, followersIds:1});
 
-	// if user doesn't exist
-	if (!userPostsAndUsername) {
-		res.status(400).json({type:'error', message:'User doesn\'t exist', data:null, errors:null})
-		return;
+		// if user doesn't exist
+		if (!userPostsAndUsername) {
+			res.status(400).json({type:'error', message:'User doesn\'t exist', data:null, errors:null})
+			return;
+		}
+
+		let skipCount = (function(pageLimit, totalPosts, pageno){
+			let skip = pageLimit * page;
+
+			if (skip > totalPosts) return (totalPosts - (totalPosts % pageLimit))
+			return skip
+		})(pageLimit, userPostsAndUsername.postIds.length, page);
+
+		const postDataArray = await Post.find({_id: {$in:userPostsAndUsername.postIds}}).limit(pageLimit).skip(skipCount)
+
+		res.status(200).json({type:'success', message:'Posts successfully retreived', data:{userProfile:{ username: userPostsAndUsername.username,  bio:userPostsAndUsername.profile.bio, picture:userPostsAndUsername.profile.picture,  followingcount:userPostsAndUsername.followingIds.length, followerscount:userPostsAndUsername.followersIds.length }, posts:postDataArray, totalPosts:userPostsAndUsername.postIds.length}, errors:null})
+
+	} catch (err) {
+		console.warn(err);
+		res.status(400).json({type:'error', message:'Something wen\'t wrong', data:null, errors:null})
 	}
-
-	let skipCount = (function(pageLimit, totalPosts, pageno){
-		let skip = pageLimit * page;
-
-		if (skip > totalPosts) return (totalPosts - (totalPosts % pageLimit))
-		return skip
-	})(pageLimit, userPostsAndUsername.postIds.length, page);
-
-
-
-	const postDataArray = await Post.find({_id: {$in:userPostsAndUsername.postIds}}).limit(pageLimit).skip(skipCount)
-
-
-	res.status(200).json({type:'success', message:'Posts successfully retreived', data:{userProfile:{ username: userPostsAndUsername.username,  bio:userPostsAndUsername.profile.bio, picture:userPostsAndUsername.profile.picture,  followingcount:userPostsAndUsername.followingIds.length, followerscount:userPostsAndUsername.followersIds.length }, posts:postDataArray, totalPosts:userPostsAndUsername.postIds.length}, errors:null})
-
+	
 
 });
 
 router.get("/feed", authCheck,  async (req, res) => {
-	const pageLimit = 12;
-	const page = req.query.page || 0;
-	const data = req.user;
+	try {
 
-	const userFollowingData = await User.find({_id:{$in:data.followingIds}})
+		const pageLimit = 12;
+		const page = req.query.page || 0;
+		const data = req.user;
 
-	let allIds = [];
+		const userFollowingData = await User.find({_id:{$in:data.followingIds}})
 
-	for (let i = 0; i < userFollowingData.length; i++){
-		allIds = allIds.concat([...userFollowingData[i].postIds, ...userFollowingData[i].sharedPostIds])
+		let allIds = [];
+
+		for (let i = 0; i < userFollowingData.length; i++){
+			allIds = allIds.concat([...userFollowingData[i].postIds, ...userFollowingData[i].sharedPostIds])
+		}
+
+		const uniqueIdArray =  allIds.filter((item, pos, ar) => ar.indexOf(item) === pos);
+
+		const skipCount = (function(pageLimit, totalPosts, pageno){
+			let skip = pageLimit * page;
+
+			if (skip > totalPosts) return (totalPosts - (totalPosts % pageLimit))
+			return skip
+		})(pageLimit, allIds.size, page);
+
+		const posts = await Post.find({_id:{$in:allIds}}).sort({creationDate:-1}).limit(pageLimit).skip(skipCount);
+
+		res.status(200).json({type:'success', message:'Feed successfully retreived', data:{userProfile:{}, posts:posts, totalPosts:uniqueIdArray.length}, errors:null})
+
+
+	} catch (err){
+		console.warn(err)
+		res.status(400).json({type:"failure", message:"Something wen't wrong", data:null, errors:null});
 	}
-
-	const uniqueIdArray =  allIds.filter((item, pos, ar) => ar.indexOf(item) === pos);
-
-	const skipCount = (function(pageLimit, totalPosts, pageno){
-		let skip = pageLimit * page;
-
-		if (skip > totalPosts) return (totalPosts - (totalPosts % pageLimit))
-		return skip
-	})(pageLimit, allIds.size, page);
-
-	const posts = await Post.find({_id:{$in:allIds}}).sort({creationDate:-1}).limit(pageLimit).skip(skipCount);
-
-	res.status(200).json({type:'success', message:'Feed successfully retreived', data:{posts:posts, totalPosts:uniqueIdArray.length}, errors:null})
-	
-	
 	
 });
-
 
 
 router.post("/editprofile", authCheck, (req, res) => {
@@ -129,25 +134,32 @@ router.post("/likepost", authCheck, (req, res) => {
 	const userdata = req.user;
 
 	if (userdata.likedPostIds.indexOf(postId) === -1) {
+
+		if (!ObjectID.isValid(postId)) {
+			res.status(400).json({type:"failure", message:"Invalid user Id", data:null, errors:null});
+			return
+		}
 		
-			const addUserIdToPost = Post.updateOne({_id:postId}, {$push:{userLikeIds:userdata._id.toString()}})
-			const addPostIdToUserLikes = User.update({_id:userdata.id}, {$push:{likedPostIds:postId}})
-			Promise.all([addUserIdToPost, addPostIdToUserLikes]).then(() => {
-				res.status(200).json({type:"success", message:"Post successfully liked", data:null, errors:null});
-			}).catch(err => {
-				console.warn(err)
-				res.status(400).json({type:"failure", message:"Something wen't wrong", data:null, errors:null});
-			});	
+		const addUserIdToPost = Post.updateOne({_id:postId}, {$push:{userLikeIds:userdata._id.toString()}})
+		const addPostIdToUserLikes = User.update({_id:userdata.id}, {$push:{likedPostIds:postId}})
+		Promise.all([addUserIdToPost, addPostIdToUserLikes]).then(() => {
+			res.status(200).json({type:"success", message:"Post successfully liked", data:null, errors:null});
+		}).catch(err => {
+			console.warn(err)
+			res.status(400).json({type:"failure", message:"Something wen't wrong", data:null, errors:null});
+		});	
+
 	} else {
-			const removeUserIdFromPost = Post.updateOne({_id:postId}, {$pull:{userLikeIds:userdata._id}})
-			const removedPostIdFromUserLikes = User.update({_id:userdata.id}, {$pull:{likedPostIds:postId}})
-			Promise.all([removeUserIdFromPost, removedPostIdFromUserLikes]).then(() => {
-				res.status(200).json({type:"success", message:"Post successfully unliked", data:null, errors:null});
-			}).catch(err => {
-				console.warn(err)
-				res.status(400).json({type:"failure", message:"Something went wrong", data:null, errors:null});
-			});
-		
+
+		const removeUserIdFromPost = Post.updateOne({_id:postId}, {$pull:{userLikeIds:userdata._id}})
+		const removedPostIdFromUserLikes = User.update({_id:userdata.id}, {$pull:{likedPostIds:postId}})
+		Promise.all([removeUserIdFromPost, removedPostIdFromUserLikes]).then(() => {
+			res.status(200).json({type:"success", message:"Post successfully unliked", data:null, errors:null});
+		}).catch(err => {
+			console.warn(err)
+			res.status(400).json({type:"failure", message:"Something went wrong", data:null, errors:null});
+		});
+	
 	}
 
 
@@ -156,6 +168,11 @@ router.post("/likepost", authCheck, (req, res) => {
 router.post("/sharepost", authCheck,  (req, res) => {
 	const postId = req.body.postId;
 	const userdata = req.user;
+
+	if (!ObjectID.isValid(postId)) {
+		res.status(400).json({type:"failure", message:"Invalid user Id", data:null, errors:null});
+		return
+	}
 
 	if (userdata.sharedPostIds.indexOf(postId) === -1) {
 		
@@ -183,9 +200,17 @@ router.post("/sharepost", authCheck,  (req, res) => {
 });
 
 
+
 router.post("/followuser", authCheck, (req, res) => {
 	const userId = req.body.userId;
 	const userdata = req.user;
+
+
+	if (!ObjectID.isValid(userId)) {
+		res.status(400).json({type:"failure", message:"Invalid user Id", data:null, errors:null});
+		return
+	}
+
 
 	if (userdata.followingIds.indexOf(userId) === -1) {
 		
@@ -221,11 +246,39 @@ router.post("/followuser", authCheck, (req, res) => {
 
 });
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+router.get("/getfollowinglist", authCheck, async (req, res) => {
+
+	try {
+		const pageLimit = 12;
+		const userdata = req.user;
+		const page = req.query.page || 0;
+		const totalFollowing = userdata.followingIds.length
+
+		let skipCount = (function(pageLimit, totalPosts, pageno){
+			let skip = pageLimit * page;
+
+			if (skip > totalPosts) return (totalPosts - (totalPosts % pageLimit))
+			return skip
+		})(pageLimit, totalFollowing, page);
+
+		const userFollowingDetails = await User.find({_id:{$in:userdata.followingIds}}, { _id:1, username:1, profile:1}).limit(pageLimit).skip(skipCount)
+
+		res.status(200).json({type:'success', message:'Following successfully retreived', data:{posts:userFollowingDetails, userProfile:{}, totalPosts:totalFollowing}, errors:null})
+
+	} catch (err) {
+		console.warn(err);
+		res.status(400).json({type:"failure", message:"Something wen't wrong", data:null, errors:null});
+	}
+
+})
+
+
 router.post("/deletepost", authCheck, (req, res) => {
 	const postId = req.body.postId;
 	const userdata = req.user;
-	console.log(postId)
-
 
 	// remove post id from the user's "postIds" array.
 	const removeIdFromPostArray = User.updateOne({_id:userdata._id}, {$pull:{postIds:postId}})
@@ -243,5 +296,5 @@ router.post("/deletepost", authCheck, (req, res) => {
 	
 
 });
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 export default router;

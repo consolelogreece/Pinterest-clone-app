@@ -43,11 +43,12 @@ class navbar extends Component {
 					<nav>
 					  <div id="navbarcontainer">
 					    <ul id="navbarlist">
-					      <li onClick={() => this.props.history.push("/")} style={{"display":"block"}} >Home</li>
-					      <li onClick={() => this.props.history.push("/feed")} style={{"display":"block"}}>Feed</li>
-					      <li onClick={() => this.props.history.push("/profile")} style={{"display":"block"}}>Profile</li>
-					      <li onClick={() => this.props.history.push("/settings")} style={{"display":"block"}}>Settings</li>
-					      <li onClick={() => this.props.signOut().then(() => this.props.history.push("/signin"))}>Sign out</li>
+					      <li onClick={() => this.props.history.push("/")} className="navbar-item-desktop" >Home</li>
+					      <li onClick={() => this.props.history.push("/feed")} className="navbar-item-desktop">Feed</li>
+					      <li onClick={() => this.props.togglepostpopup()} className="navbar-item-desktop">New post</li>
+					      <li onClick={() => this.props.history.push("/profile")} className="navbar-item-desktop">Profile</li>
+					      <li onClick={() => this.props.history.push("/settings")} className="navbar-item-desktop">Settings</li>
+					      <li onClick={() => this.props.signOut().then(() => this.props.history.push("/signin"))} className="navbar-item-desktop">Sign out</li>
 					    </ul>
 					  </div>
 					  <div id="navbar_container--mobile">
@@ -55,9 +56,10 @@ class navbar extends Component {
 					      <li href="#"><span><Icon name={this.state.isMenuOpen ? "close" : "bars"}/></span></li>
 					      <li className="menu-item" style={this.state.style}><Link style={{"display":"block"}} to={"/"}>Home</Link></li>
 					      <li className="menu-item" style={this.state.style}><Link style={{"display":"block"}} to={"/feed"}>Feed</Link></li>
+					      <li className="menu-item" style={this.state.style}><Link style={{"display":"block"}} to={"/"}>New post</Link></li>
 					      <li className="menu-item" style={this.state.style}><Link style={{"display":"block"}} to={"/profile"}>Profile</Link></li>
 						  <li className="menu-item" style={this.state.style}><Link style={{"display":"block"}} to={"/settings"}>Settings</Link></li>
-					      <li className="menu-item" style={this.state.style} onClick={() => this.props.signOut().then(() => this.props.history.push("/signin"))}>Sign out</li>
+					      <li className="menu-item" style={this.state.style} onClick={() => this.props.signOut().then(() => this.props.history.push("/signin")) }>Sign out</li>
 					    </ul>
 					  </div>
 					</nav>

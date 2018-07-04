@@ -13,23 +13,32 @@
 }
 
 #navbarcontainer {
-    border-top: 1px dashed #fff;
+  border-top: 1px dashed #fff;
   list-style-type: none;
-  display: block;
+
   background-color: #d15559;
 }
 #navbarlist {
   margin: 0 auto;
-  width: 765px;
+  max-width: 1200px;
   display:flex;
   justify-content:center;
   font-family: 'Montserrat', sans-serif;
   border-bottom: 1px dashed #fff;
+  display: flex;
+  text-align:center;
+  justify-content: center;
 }
+
+.navbar-item-desktop {
+  display: block;
+  flex:1;
+}
+
 #navbarlist > li {
   cursor: pointer;
   display: inline-block;
-  padding: 10px 45px;
+  padding: 10px 20px;
   text-align: center;
   background-color: #d15559;
   color: #fff;

@@ -93,31 +93,35 @@ router.post('/resetpassword', (req, res) => {
 })
 
 router.post('/changepassword', authCheck, async (req, res) => {
-	const data = req.user;
-	const credentials = req.body.credentials;
-	
 
-	if (validateChangePassword(credentials)) {
-		res.status(403).json({type:"general", message:"You are not authorized to perform this action", data:null, errors:{general:"Not authorized"}})
-		return;
-	} 
+	try {
+		
+		const data = req.user;
+		const credentials = req.body.credentials;
+		
 
-	const isValidPassword = await isCorrectPassword(credentials.currentpassword, data.passwordHash);
+		if (validateChangePassword(credentials)) {
+			res.status(403).json({type:"general", message:"You are not authorized to perform this action", data:null, errors:{general:"Not authorized"}})
+			return;
+		} 
 
-	if (!isValidPassword) {
-		res.status(403).json({type:"general", message:"You are not authorized to perform this action", data:null, errors:{currentpassword:"Incorrect password"}}) 
-		return;
-	}
+		const isValidPassword = await isCorrectPassword(credentials.currentpassword, data.passwordHash);
 
-	const newPasswordHash = await generateHash(credentials.newpassword);
+		if (!isValidPassword) {
+			res.status(403).json({type:"general", message:"You are not authorized to perform this action", data:null, errors:{currentpassword:"Incorrect password"}}) 
+			return;
+		}
 
-	User.updateOne({_id:data._id}, {$set: {passwordHash:newPasswordHash}}).then(data => {
-	 	res.status(200).json({type:"general", message:"Password change successful", data:null, errors:null})
-	}).catch(err => {
-		console.log(err);
+		const newPasswordHash = await generateHash(credentials.newpassword);
+
+		User.updateOne({_id:data._id}, {$set: {passwordHash:newPasswordHash}}).then(data => {
+		 	res.status(200).json({type:"general", message:"Password change successful", data:null, errors:null})
+		})
+
+	} catch (err) {
+		console.warn(err);
 		res.status(400).json({type:'general', errors:{general:"something wen't wrong"}, message:'something went wrong', data:null})
-
-	})
+	}
 
 
 })

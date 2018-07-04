@@ -31,8 +31,6 @@ class cardContainer extends Component {
 
 			}
 
-
-			 
 			let doesPostBelongCurrentUser = false
 
 			if (this.props.isAuthenticated) {
@@ -87,10 +85,10 @@ class cardContainer extends Component {
 					{postData}
 				</Masonry>
 				<div onClick={e => this.props.handlePageChange(e)} style={{ display:"flex", justifyContent:"center", margin:"auto"}}>			
-					<Icon id="first" size="huge" link={true} name="angle double left"/>
-					<Icon id="prev" size="huge" link={true} name="angle left"/>
-					<Icon id="next" size="huge" link={true} name="angle right"/>
-					<Icon id="last" size="huge" link={true} name="angle double right"/>
+					<Icon id="first" style={{color:"#d15559"}} size="huge" link={true} name="angle double left"/>
+					<Icon id="prev" style={{color:"#d15559"}} size="huge" link={true} name="angle left"/>
+					<Icon id="next" style={{color:"#d15559"}} size="huge" link={true} name="angle right"/>
+					<Icon id="last" style={{color:"#d15559"}} size="huge" link={true} name="angle double right"/>
 				</div>
 			</div>
 		)

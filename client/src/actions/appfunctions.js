@@ -22,6 +22,14 @@ export const getFeed = data => dispatch => {
 	})
 }
 
+
+export const getFollowingList = page => dispatch => {
+	return axios.get("/app/getfollowinglist?page=" + page).then(response => {
+		dispatch({type:"RECEIVED_FOLLOWING", data:response.data.data})
+	})
+}
+
+
 export const deletePostsFromStore = () => {
 	return ({type:"DELETE_POSTS_FROM_STORE"});
 }
@@ -76,6 +84,21 @@ export const unfollow = userId => dispatch => {
 		dispatch({type:"USER_FOLLOWED", id:userId})
 	})
 }
+
+export const unfollowAndRemoveFromFollowingPage = user => dispatch => {
+	const userId = user.id
+
+	dispatch({type:"USER_UNFOLLOWED", id:userId})
+	dispatch({type:"REMOVE_USER_FROM_FOLLOWING", id:userId})
+	return axios.post('/app/followuser', {userId: userId}).catch(response => {
+		// if error, 'unfollow' post. This gives more snappy feedback when clicking follow, as it appears to follow immediately
+		dispatch({type:"USER_FOLLOWED", id:userId})
+		dispatch({type:"RE_ADD_USER_TO_FOLLOWING", user:user.user})
+	})
+}
+
+
+
 
 export const deletePost = postId => dispatch => {
 	dispatch({type:"POST_DELETED", id:postId});

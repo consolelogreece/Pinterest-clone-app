@@ -18,6 +18,7 @@ class userpostpage extends Component {
 
 		let parsedUrlObject = queryString.parse(this.props.history.location.search)
 
+		// redirect to homepage if no Id provided
 		if (!Object.prototype.hasOwnProperty.call(parsedUrlObject, '?id')) {
 			this.props.history.push("/")
 		} 

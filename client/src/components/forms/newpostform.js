@@ -51,7 +51,7 @@ class newpostform extends Component {
 
 	render(){
 		return(	
-			<Card style={{'border':'1px solid grey', 'borderRadius':'6px', 'margin':'auto', zIndex:'1', boxShadow:'10px 10px 5px grey', height:"500px", width:"600px"}}>
+			<Card style={{'border':'1px solid grey', 'borderRadius':'6px', 'margin':'auto', boxShadow:'10px 10px 5px grey', height:"500px", width:"600px"}}>
 				<div style={{'backgroundColor':'#474647', 'width':'auto'}}>
 					<Image style={{"margin":"auto", height:"300px"}} src={this.state.data.imgurl} onError={e => e.target.src='https://i.imgur.com/l0dkJDp.png'}/> 	
 				</div>
@@ -70,12 +70,11 @@ class newpostform extends Component {
 					</Form>
 					<Grid style={{textAlign:"center"}}>
 					    <Grid.Row>
-					      <Grid.Column width={8}>
-					        <Button style={{width:"90%"}} onClick={() => this.handleSubmit()} primary>Submit</Button>
-					      </Grid.Column>
-					      <Grid.Column width={8}>
-					        <Button style={{width:"90%", backgroundColor:'#b8514a'}} primary onClick={() => this.props.closeform()}>cancel</Button>
-					      </Grid.Column>
+					 		<Button.Group style={{width:"90%", margin:"0 auto"}} >
+								<Button style={{ backgroundColor:"#d15559", color:"#fff"}} onClick={() => this.handleSubmit()} primary>Submit</Button>
+						    	<Button.Or />
+						   		<Button style={{backgroundColor:"#202020", color:"#fff"}} onClick={() => this.props.closeform()}>cancel</Button>
+					  		</Button.Group> 
 					    </Grid.Row>
 					</Grid>
 				</div>

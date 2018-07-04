@@ -62,17 +62,17 @@ class changepasswordform extends Component {
 				<Form loading={loading}>
 					<Form.Field error={!!errors.currentpassword}>
 						<label>Current password</label>
-						<Input type="password" id="currentpassword" name="currentpassword" onChange={e => this.handlechange(e)} value={data.currentpassword} />
+						<Input autoComplete="current-password" type="password" id="currentpassword" name="currentpassword" onChange={e => this.handlechange(e)} value={data.currentpassword} />
 						{!!errors.currentpassword && <ErrorMessageInline text={errors.currentpassword}/>}
 					</Form.Field>
 					<Form.Field error={!!errors.newpassword}>
 						<label>New password</label>
-						<Input type="password" id="newpassword" name="newpassword" onChange={e => this.handlechange(e)} value={data.newpassword} />
+						<Input autoComplete="new-password" type="password" id="newpassword" name="newpassword" onChange={e => this.handlechange(e)} value={data.newpassword} />
 						{!!errors.newpassword && <ErrorMessageInline text={errors.newpassword}/>}
 					</Form.Field>
 					<Form.Field error={!!errors.confirmpassword}>
 						<label>Confirm password</label>
-						<Input type="password" id="confirmpassword" name="confirmpassword" onChange={e => this.handlechange(e)} value={data.confirmpassword} />
+						<Input autoComplete="new-password" type="password" id="confirmpassword" name="confirmpassword" onChange={e => this.handlechange(e)} value={data.confirmpassword} />
 						{!!errors.confirmpassword && <ErrorMessageInline text={errors.confirmpassword}/>}
 					</Form.Field>
 					{!!errors.general && (<div><ErrorMessageInline text={errors.general}/> <br /></div>)}

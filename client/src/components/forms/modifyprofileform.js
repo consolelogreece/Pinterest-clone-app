@@ -9,7 +9,6 @@ class modifyprofileform extends Component {
 
 	constructor(props){
 		super(props)
-		console.log(this.props)
 		this.state={
 			bio:this.props.userProfile.bio,
 			picture:this.props.userProfile.picture,

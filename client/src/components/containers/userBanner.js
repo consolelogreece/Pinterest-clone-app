@@ -9,7 +9,7 @@ const userBanner = props => {
 			  <div className="banner--mobile">
 
 			    <div className="pic-box--mobile">
-			      <img onError={e => e.target.src='https://i.imgur.com/xRped5d.png'} className="picture-element--mobile" src={!props.userProfile.picture ? "https://i.imgur.com/xRped5d.png" : props.userProfile.picture} />
+			      <img alt="User's display pic" onError={e => e.target.src='https://i.imgur.com/xRped5d.png'} className="picture-element--mobile" src={!props.userProfile.picture ? "https://i.imgur.com/xRped5d.png" : props.userProfile.picture} />
 			    </div>
 
 			    <div className="info-box--mobile">
@@ -36,7 +36,7 @@ const userBanner = props => {
 			  <div className="banner">
 
 			    <div className="pic-box">
-			      <img onError={e => e.target.src='https://i.imgur.com/xRped5d.png'} className="picture-element" src={!props.userProfile.picture ? "https://i.imgur.com/xRped5d.png" : props.userProfile.picture} />
+			      <img alt="User's display pic" onError={e => e.target.src='https://i.imgur.com/xRped5d.png'} className="picture-element" src={!props.userProfile.picture ? "https://i.imgur.com/xRped5d.png" : props.userProfile.picture} />
 			    </div>
 
 			    <div className="info-box">

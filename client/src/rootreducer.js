@@ -9,6 +9,7 @@ const initialState = {
 		currentPagePosts:{
 			posts:[],
 			username:'',
+			userProfile:{},
 			totalPosts:0
 		}
 	},
