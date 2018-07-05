@@ -93,7 +93,7 @@ body {
   margin-top:1vw;
 }
 
-@media only screen and (min-width:768px) {
+@media only screen and (min-width:505px) {
    .banner{
     display:flex;
     width:100%;

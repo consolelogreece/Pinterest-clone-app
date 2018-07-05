@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
-import {Icon} from 'semantic-ui-react';
+import {Icon, Input} from 'semantic-ui-react';
 
 import styles from './navbar.css' 
 
@@ -16,8 +16,11 @@ class navbar extends Component {
 				fontSize:"0px",
 				border:"0px",
 				margin:"0px"
-			}
+			},
+			searchquery:""
+		
 		}
+
 	}
 
 	toggleMenu = () => {
@@ -28,6 +31,20 @@ class navbar extends Component {
 		}
 	}
 
+	handleChange = e => {
+		this.setState({...this.state, searchquery:e.target.value});
+		this.submitSearchQuery();
+	}
+
+	
+
+
+	submitSearchQuery = debounce(() => {
+		console.log(this.state.searchquery)
+	}, 500);
+
+
+
 	render(){
 
 		return (
@@ -35,7 +52,18 @@ class navbar extends Component {
 
 
 				<div className="app-header">
-					<h2 className="app-header-text">K i n t e r e s t</h2>
+					<div className="app-header-text-container">
+						<h2 className="app-header-text">K i n t e r e s t</h2>
+					</div>
+
+					<div className="app-search-bar-container">
+						<div id="app-search-bar-element-container">
+							<Input type="text" onChange={this.handleChange} icon="Search by username" className="app-search-bar" fluid={true} placeholder="search Kinterest..." />
+						</div>
+						<div id="app-search-bar-results-container">
+							
+						</div>
+					</div>
 				</div>
 
 				{this.props.isAuthenticated 
@@ -56,7 +84,7 @@ class navbar extends Component {
 					      <li href="#"><span><Icon name={this.state.isMenuOpen ? "close" : "bars"}/></span></li>
 					      <li className="menu-item" style={this.state.style}><Link style={{"display":"block"}} to={"/"}>Home</Link></li>
 					      <li className="menu-item" style={this.state.style}><Link style={{"display":"block"}} to={"/feed"}>Feed</Link></li>
-					      <li className="menu-item" style={this.state.style}><Link style={{"display":"block"}} to={"/"}>New post</Link></li>
+					      <li className="menu-item" style={this.state.style} onClick={() => this.props.togglepostpopup()}>New post</li>
 					      <li className="menu-item" style={this.state.style}><Link style={{"display":"block"}} to={"/profile"}>Profile</Link></li>
 						  <li className="menu-item" style={this.state.style}><Link style={{"display":"block"}} to={"/settings"}>Settings</Link></li>
 					      <li className="menu-item" style={this.state.style} onClick={() => this.props.signOut().then(() => this.props.history.push("/signin")) }>Sign out</li>
@@ -89,6 +117,24 @@ class navbar extends Component {
 	}
 	
 }
+
+
+const debounce = (func, wait, immediate) => {
+	let timeout, result;
+	return function() {
+	    let context = this, args = arguments;
+	    let later = function() {
+		    timeout = null;
+		    if (!immediate) result = func.apply(context, args);
+	    };
+	    let callNow = immediate && !timeout;
+	    clearTimeout(timeout);
+	    timeout = setTimeout(later, wait);
+	    if (callNow) result = func.apply(context, args);
+	    return result;
+	};
+}
+
 
 
 export default navbar;

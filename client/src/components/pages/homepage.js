@@ -12,10 +12,6 @@ class homepage extends Component {
 				<h2>TODO:
 				<br />
 				 Add search bar, query database on typing, but debounce so as to not spam the database unneccesarily
-
-
-
-
 				</h2>
 				<button onClick={() => this.props.onToggleClick()}>toggle post popup</button> <br />
 			</div>

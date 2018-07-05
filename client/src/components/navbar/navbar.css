@@ -3,7 +3,14 @@
 
 .app-header {
   background-color:  #d15559;
+  display:flex;
+  flex-wrap: wrap;
 }
+
+.app-header-text-container {
+  flex: 1;
+}
+
 
 .app-header-text {
   font-family: 'Norican', cursive;
@@ -12,10 +19,22 @@
   padding-left:10px;
 }
 
+.app-search-bar-container {
+  flex:2;
+  margin: auto;
+  width:100%;
+}
+
+.app-search-bar {
+  width:60%;
+}
+
+
+
+
 #navbarcontainer {
   border-top: 1px dashed #fff;
   list-style-type: none;
-
   background-color: #d15559;
 }
 #navbarlist {
@@ -104,5 +123,18 @@
   #navbar_container--mobile {
     display:block;   
   }
-
+  .app-header {
+    flex-direction:column;
+    padding-bottom:3px;
+  }
+  .app-search-bar {
+    width:90%;
+    margin:0 auto;
+  }
+  .app-header-text-container {
+    margin:0 auto;
+  }
+  .app-header-text {
+    text-align:center;
+  }
 }

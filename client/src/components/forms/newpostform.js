@@ -51,7 +51,7 @@ class newpostform extends Component {
 
 	render(){
 		return(	
-			<Card style={{'border':'1px solid grey', 'borderRadius':'6px', 'margin':'auto', boxShadow:'10px 10px 5px grey', height:"500px", width:"600px"}}>
+			<Card style={{'border':'1px solid grey', 'borderRadius':'6px', 'margin':'auto', boxShadow: "10px 5px 10px 5px rgba(0, 0, 0, 0.2), 10px 5px 10px 5px rgba(0, 0, 0, 0.19)", height:"500px", width:"600px"}}>
 				<div style={{'backgroundColor':'#474647', 'width':'auto'}}>
 					<Image style={{"margin":"auto", height:"300px"}} src={this.state.data.imgurl} onError={e => e.target.src='https://i.imgur.com/l0dkJDp.png'}/> 	
 				</div>
