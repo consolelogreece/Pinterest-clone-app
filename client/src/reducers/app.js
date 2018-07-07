@@ -19,6 +19,16 @@ export default (state = {}, action = {}) => {
 		case "RE_ADD_USER_TO_FOLLOWING": 
 			return {...state, currentPagePosts:{...state.currentPagePosts, posts:[...state.currentPagePosts.posts, action.user]}}
 
+		case "ADD_SEARCH_RESULTS_TO_STORE":
+			return {...state, search:{...state.search, displaySearch:true, data:{...action.data}}}
+
+		case "CLEAR_SEARCH_RESULTS": 	
+			return {...state, search:{...state.search, displaySearch:false, data:{results:[], isMoreThanLimit:false}}}
+
+
+
+
+
 		default: return state;
 	}
 }

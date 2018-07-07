@@ -98,8 +98,6 @@ export const unfollowAndRemoveFromFollowingPage = user => dispatch => {
 }
 
 
-
-
 export const deletePost = postId => dispatch => {
 	dispatch({type:"POST_DELETED", id:postId});
 	dispatch({type:"REMOVE_POST_FROM_USER_POST_PAGE", id:postId})
@@ -113,5 +111,14 @@ export const editProfile = new_profile => dispatch => {
 		dispatch({type:"PROFILE_EDITED", data:new_profile})
 	})
 }
+
+export const searchQuery = seachquery => dispatch => {
+	return axios.get("/app/search?q=" + seachquery).then(response => {
+		dispatch({type:"ADD_SEARCH_RESULTS_TO_STORE", data:response.data.results || {results:[], isMoreThanLimit:false}})
+	})
+}
+
+export const clearSearchResults = () => ({"type":"CLEAR_SEARCH_RESULTS"})
+
 
 

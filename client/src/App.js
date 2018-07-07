@@ -16,7 +16,7 @@ import googleRedirect from './components/redirect-pages/google-redirect';
 import Navbar from './components/navbar/navbar';
 import Footer from './components/footer/footer'
 
-import { togglepostpopup, submitpost } from './actions/appfunctions'
+import { togglepostpopup, submitpost, searchQuery, clearSearchResults } from './actions/appfunctions'
 import {signOut} from './actions/auth'
 
 import Newpostform from './components/forms/newpostform';
@@ -78,7 +78,15 @@ class App extends Component {
           </div>
         </Transition>
 
-        <Navbar togglepostpopup={this.props.onToggleClick} history={this.props.history} signOut={this.props.signOut} isAuthenticated={this.props.isAuthenticated} />
+        <Navbar 
+          clearSearchResults={this.props.clearSearchResults} 
+          search={this.props.search} 
+          searchQuery={this.props.searchQuery} 
+          togglepostpopup={this.props.onToggleClick} 
+          history={this.props.history} 
+          signOut={this.props.signOut} 
+          isAuthenticated={this.props.isAuthenticated} 
+        />
 
   	    <Switch>
   	    	<NotLoggedInOnlyRoute isAuthenticated={this.props.isAuthenticated} path='/signin' exact component={signinpage} />
@@ -103,7 +111,8 @@ class App extends Component {
 
 const mapStateToProps = state => ({
   renderNewPostPopup:state.app.renderNewPostPopup,
-  isAuthenticated:state.user.isAuthenticated
+  isAuthenticated:state.user.isAuthenticated,
+  search: state.app.search
 })
 
 
@@ -117,8 +126,13 @@ const mapDispatchToProps = dispatch => {
     },
     signOut: () => {
       return dispatch(signOut())
+    },
+    searchQuery: searchquery => {
+      return dispatch(searchQuery(searchquery))
+    },
+    clearSearchResults: () => {
+      dispatch(clearSearchResults());
     }
-
   }
 }
 

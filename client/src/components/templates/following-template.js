@@ -1,17 +1,18 @@
 import React from 'react';
 import {Icon} from 'semantic-ui-react';
-import styles from './following-template-style.css'
+import styles from './following-template-style.css';
+import {Link} from 'react-router-dom'
 
 const followingtemplate = props => {
 
 	return (
-      <div key={props._id} id="following-entry">
+      <div style={{padding:'2px 2px 1px 2px'}} key={props.data._id} id="following-entry">
         <div className="entry-picture-container">
           <img alt="User's display pic" className="entry-picture" src={props.data.profile.picture} onError={e => e.target.src='https://i.imgur.com/xRped5d.png'} />
         </div>
 
         <div className="entry-username-container">
-          <h4 className="entry-username">{props.data.username}</h4>
+          <h4 className="entry-username"><Link to={`/user?id=${props.data._id}`}>{props.data.username}</Link></h4>
         </div>
 
         <div className="entry-bio-container">

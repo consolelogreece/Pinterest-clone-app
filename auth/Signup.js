@@ -31,7 +31,7 @@ const Signup = (req, databaseObject) => {
 
     	// If there is an error inserting to database, return error, otherwise, return account created successfully message
     	else return addToDatabase(credentials, passwordHash, collection)
-    				.then(data => {console.log(data.result); return ({type:"general", message:"Account successfully created!", errors:null, code:200, data:{email:"not yet implemented", jwt:"not yet implemented"}})})
+    				.then(data => {return ({type:"general", message:"Account successfully created!", errors:null, code:200, data:{email:"not yet implemented", jwt:"not yet implemented"}})})
     				.catch(err => ({type:"general", message:"something went wrong", code:400, data:null, errors:{general:"Invalid credentials"}}))
     })
 } 

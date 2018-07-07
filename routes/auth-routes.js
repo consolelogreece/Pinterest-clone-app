@@ -27,12 +27,11 @@ const authCheck = (req, res, next) => {
 //auth signup
 router.post('/signup', (req, res) => {
 	Signup(req, req.app.get("databaseObject")).then(response => {
-
 						// create response based on the data returned by Signup function.
 						res.status(response.code).json({type:response.type, message:response.message, data:response.data, errors:response.errors})
 					})
 				   .catch(err => {
-				   		console.log("==================", err);
+				   		console.log(err);
 				   		// incase of unhandled error, return general error.
 				   		res.status(400).json({type:"general", message:"Something went wrong"}
 				   	)})

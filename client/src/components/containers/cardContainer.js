@@ -67,6 +67,7 @@ class cardContainer extends Component {
 	}
 
 	componentDidMount(){
+		console.log("x")
 		this.props.populatePostArray();
 	}
 

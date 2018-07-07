@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import {Icon, Input} from 'semantic-ui-react';
+import SearchResultTemplate from '../templates/search-result-template';
+
 
 import styles from './navbar.css' 
 
@@ -32,20 +34,50 @@ class navbar extends Component {
 	}
 
 	handleChange = e => {
-		this.setState({...this.state, searchquery:e.target.value});
-		this.submitSearchQuery();
+		this.setState({...this.state, searchquery:e.target.value}, () => {
+			if (this.state.searchquery === "") {
+				this.clearSearch()
+			} else {
+				this.submitSearchQuery();
+			}
+		});
+	}
+
+	clearSearch = () => {
+		this.setState({searchquery:""});
+		this.props.clearSearchResults();
+	}
+
+	// creates what to display on search bar
+	createSearchDisplay = searchQueryResults => {
+		const display = searchQueryResults.results.map(result => {
+			return <SearchResultTemplate clearSearch={this.clearSearch} data={{...result}} />
+		})
+
+		if (display.length === 0 ) display.push(<SearchResultTemplate clearSearch={this.clearSearch} text="No results found..." link={null} isNotResult={true} />)
+
+		if (searchQueryResults.isMoreThanLimit) display.push(display.push(<SearchResultTemplate clearSearch={this.clearSearch} text="View all" link={"/people?q=" + this.state.searchquery} isNotResult={true} />))
+
+		return display;
 	}
 
 	
 
 
 	submitSearchQuery = debounce(() => {
-		console.log(this.state.searchquery)
-	}, 500);
+		this.props.searchQuery(this.state.searchquery).then(() => {
+			//quick check to see if search query is empty, if it is, remove results provided by search query
+			if (this.state.searchquery === "") this.props.clearSearchResults();
+		}).catch(() => {
+			console.log("error in searchquery")
+		})
+	}, 250);
 
 
 
 	render(){
+
+		let searchDisplay = this.createSearchDisplay(this.props.search.data);
 
 		return (
 			<div>
@@ -58,10 +90,10 @@ class navbar extends Component {
 
 					<div className="app-search-bar-container">
 						<div id="app-search-bar-element-container">
-							<Input type="text" onChange={this.handleChange} icon="Search by username" className="app-search-bar" fluid={true} placeholder="search Kinterest..." />
+							<Input type="text" value={this.state.searchquery} onChange={this.handleChange} icon={<Icon link={true} name="delete" onClick={() => this.clearSearch()} />} className="app-search-bar" fluid={true} placeholder="Search by username..." />
 						</div>
 						<div id="app-search-bar-results-container">
-							
+							{this.props.search.displaySearch && searchDisplay}
 						</div>
 					</div>
 				</div>

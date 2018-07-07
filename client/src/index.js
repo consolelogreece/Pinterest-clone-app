@@ -22,6 +22,14 @@ const initialState = {
 			userProfile:{
 			},
 			totalPosts:0
+		},
+		search:{
+			data:{
+				results:[],
+				isMoreThanLimit:false
+
+			},
+			displaySearch:false
 		}
 	},
 	user:{

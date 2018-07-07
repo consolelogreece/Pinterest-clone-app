@@ -11,7 +11,11 @@ class homepage extends Component {
 				<h1>home</h1><br />
 				<h2>TODO:
 				<br />
-				 Add search bar, query database on typing, but debounce so as to not spam the database unneccesarily
+				add view all page with pagination, so views can view all results of search
+					<br />
+				check why having "onclick" on a link causes a whole page refresh -> very strange
+				<br />
+				why does mongodb $text $search not work with letter a? 
 				</h2>
 				<button onClick={() => this.props.onToggleClick()}>toggle post popup</button> <br />
 			</div>
@@ -26,7 +30,6 @@ const mapDispatchToProps = dispatch => {
     onToggleClick: () => {
       dispatch(togglepostpopup())
     }
-    
   }
 }
 

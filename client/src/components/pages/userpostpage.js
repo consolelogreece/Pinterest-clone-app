@@ -12,7 +12,7 @@ import {Icon} from 'semantic-ui-react';
 import queryString from 'querystring';
 import PostCardTemplate from '../templates/post-card-template';
  
-class userpostpage extends Component {
+class userpostpage extends React.PureComponent {
 
 	populatePostArray = () => {
 
@@ -64,11 +64,19 @@ class userpostpage extends Component {
 		}
 	}
 
+	componentDidUpdate (prevProps) {
+	    const newLocationKey = this.props.location.key;
+	    const oldLocationKey = prevProps.location.key;
+	    if (newLocationKey !== oldLocationKey)
+	    this.populatePostArray();
+	 }
+
 	render(){
+
 		return(
 			<div>
-				<UserBanner userProfile={this.props.userProfile} />
-				<CardContainer {...this.props} populatePostArray={this.populatePostArray} handlePageChange={this.handlePageChange} />
+				<UserBanner history={this.props.history} userProfile={this.props.userProfile} />
+				<CardContainer history={this.props.history} {...this.props} populatePostArray={this.populatePostArray} handlePageChange={this.handlePageChange} />
 			</div>
 		)
 	}
