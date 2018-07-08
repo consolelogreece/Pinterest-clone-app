@@ -8,9 +8,17 @@ const initialState = {
 		renderNewPostPopup:false,
 		currentPagePosts:{
 			posts:[],
-			username:'',
-			userProfile:{},
+			userProfile:{
+			},
 			totalPosts:0
+		},
+		search:{
+			data:{
+				results:[],
+				isMoreThanLimit:false
+
+			},
+			displaySearch:false
 		}
 	},
 	user:{

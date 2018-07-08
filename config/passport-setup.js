@@ -41,8 +41,7 @@ passport.use(
 					profile:{
 						bio:"",
 						picture:profile._json.image.url
-					},
-					nestatesta:"1212"
+					}
 
 				}).save().then((newUser) => {
 					done(null, newUser)

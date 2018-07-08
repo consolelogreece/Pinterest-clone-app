@@ -295,10 +295,10 @@ router.post("/deletepost", authCheck, (req, res) => {
 });
 
 router.get("/search", (req, res) => {
+
 	let searchQuery = req.query.q;
 	
 	User.find({$text:{$search:searchQuery}}, {_id:1, username:1, profile:1, score:{$meta:"textScore"}}).sort({score:{$meta:"textScore"}}).limit(8).then(results => {
-		console.log(results)
 		let returnResults = results;
 		let isMoreThanLimit = false;
 		if (results.length === 8) {
@@ -312,6 +312,11 @@ router.get("/search", (req, res) => {
 		res.status(400).json({type:"failure", message:"Something wen't wrong", data:null, errors:null});
 	})
 })
+
+
+
+
+
 
 
 

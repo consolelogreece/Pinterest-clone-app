@@ -97,6 +97,10 @@ router.post('/changepassword', authCheck, async (req, res) => {
 		
 		const data = req.user;
 		const credentials = req.body.credentials;
+
+		if (data.platformId){
+			throw "User tried to change password when signed in with non-native account"
+		}
 		
 
 		if (validateChangePassword(credentials)) {

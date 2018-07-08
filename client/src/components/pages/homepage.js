@@ -12,8 +12,8 @@ class homepage extends Component {
 				<h2>TODO:
 				<br />
 				add view all page with pagination, so views can view all results of search
-					<br />
-				check why having "onclick" on a link causes a whole page refresh -> very strange
+		
+		
 				<br />
 				why does mongodb $text $search not work with letter a? 
 				</h2>

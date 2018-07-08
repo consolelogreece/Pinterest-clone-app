@@ -3,6 +3,8 @@ import SigninForm from '../forms/signinform'
 import { resetPasswordRequestEmail, signin_native, signin_google } from '../../actions/auth'
 import { connect } from 'react-redux';
 import PasswordResetRequestForm from '../forms/passwordresetrequestform';
+import Thirdpartysigninform from '../forms/thirdpartysigninform';
+import './pagestyles.css'
 
 class signinpage extends Component {
 	state={
@@ -20,12 +22,16 @@ class signinpage extends Component {
 
 	render(){
 		return(
-			<div>
+			<div className="main-page-container">
 				{this.state.reset ? <PasswordResetRequestForm resetPassword={this.resetpassword} setReset={this.setReset}/> : <SigninForm setReset={this.setReset} signin={this.signin_native}/>}
-				<a href="http://localhost:8080/auth/google">Google+</a>
+				<br />
+				<h2 style={{ width: "100%", textAlign: "center", borderBottom: "1px solid #000", "lineHeight": "0.1em", margin: "10px 0 20px" }}><span style={{background:"#fff", padding:"0 10px"}}>or</span></h2>
+				<Thirdpartysigninform />
 			</div>
 		)
 	}
 }
+
+
 
 export default connect(null, { signin_native })(signinpage);
