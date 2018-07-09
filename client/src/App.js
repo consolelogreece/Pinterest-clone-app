@@ -8,6 +8,7 @@ import resetpasswordpage from './components/pages/resetpasswordpage';
 import myfollowinglistpage from './components/pages/myfollowinglistpage';
 import settingspage from './components/pages/settingspage';
 import profilepage from './components/pages/profilepage';
+import peoplepage from './components/pages/peoplepage';
 
 import feedpage from './components/pages/feedpage';
 import userpostpage from './components/pages/userpostpage';
@@ -97,6 +98,7 @@ class App extends Component {
           <PrivateRoute isAuthenticated={this.props.isAuthenticated} path='/profile' component={profilepage} />
           <PrivateRoute isAuthenticated={this.props.isAuthenticated} path='/settings' component={settingspage} />
           <Route isAuthenticated={this.props.isAuthenticated} path='/user' component={userpostpage} />
+          <Route path='/people' component={peoplepage} />
           <Route isAuthenticated={this.props.isAuthenticated} path='/auth/google/redirect' component={googleRedirect} />
   	    	<Route isAuthenticated={this.props.isAuthenticated} path='/' component={homepage} />
         </Switch>

@@ -18,7 +18,7 @@ const UserSchema = new Schema({
 	}
 });
 
-UserSchema.index({username: "text"})
+UserSchema.index({username: "text"}, { default_language: "none" })
 
 const User = mongoose.model('User', UserSchema);
 

@@ -4,9 +4,9 @@
   max-height:55px;
   overflow:hidden;
   margin:0 auto;
-  background-color:#d15559;
+  background-color: #fff;
   padding:2px;
-  color:#fff;
+  color:#000;
   margin-bottom:2px;
    
 }
@@ -31,7 +31,7 @@
   height:50px;
   width:50px;
   border-radius:100%;
-  border:2px solid #fff;
+  border:2px solid#d15559;
 }
 
 
@@ -39,4 +39,11 @@
   .entry-bio-container {
     display: none;
   }
+}
+
+.entry-username > a{
+  color:#000;
+}
+.entry-username > a:hover{
+  color:#d15559;
 }

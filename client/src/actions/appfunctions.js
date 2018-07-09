@@ -112,11 +112,18 @@ export const editProfile = new_profile => dispatch => {
 	})
 }
 
-export const searchQuery = seachquery => dispatch => {
-	return axios.get("/app/search?q=" + seachquery).then(response => {
+export const searchQuery = searchquery => dispatch => {
+	return axios.get("/app/searchbar?q=" + searchquery).then(response => {
 		dispatch({type:"ADD_SEARCH_RESULTS_TO_STORE", data:response.data.results || {results:[], isMoreThanLimit:false}})
 	})
 }
+
+export const getPeople = (searchquery, page) => dispatch => {
+	return axios.get("/app/search?q=" + searchquery + "&page="+ page).then(response => {
+		dispatch({type:"RECEIVED_PEOPLE", data:response.data.data})
+	})
+}
+
 
 export const clearSearchResults = () => ({"type":"CLEAR_SEARCH_RESULTS"})
 

@@ -24,30 +24,29 @@ class myfollowinglistpage extends Component {
 		
 			case "first":
 				this.props.history.push(pagepath + "0");
-				this.populatePostArray();
 				break;
 			case "prev":
 				if (page !== 0) this.props.history.push(pagepath + (page - 1));
-				this.populatePostArray();
 				break;
 			case "next":
 				this.props.history.push(pagepath + (page + 1));
-				this.populatePostArray();
 				break;
 			case "last":
 				// 12 = total posts per page.
 				this.props.history.push(pagepath + (Math.floor(this.props.totalPosts / 12)));
-				this.populatePostArray();
 				break;
 			default:
-				return;
+				break;
+
 		}
+		this.populatePostArray();
 	}
 
 	componentDidMount(){
 		this.props.getFollowingList(0)
 	}
 
+	
 
 	render(){
 
@@ -82,7 +81,8 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = state => {
 	return {
-		followinglist:state.app.currentPagePosts.posts
+		followinglist:state.app.currentPagePosts.posts,
+		totalPosts:state.app.currentPagePosts.totalPosts
 	}
 }
 

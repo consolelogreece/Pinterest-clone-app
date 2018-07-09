@@ -294,7 +294,7 @@ router.post("/deletepost", authCheck, (req, res) => {
 	})
 });
 
-router.get("/search", (req, res) => {
+router.get("/searchbar", (req, res) => {
 
 	let searchQuery = req.query.q;
 	
@@ -311,6 +311,41 @@ router.get("/search", (req, res) => {
 		console.warn(err)
 		res.status(400).json({type:"failure", message:"Something wen't wrong", data:null, errors:null});
 	})
+})
+
+router.get("/search",  async (req, res) => {
+
+	const pageLimit = 12;
+	const page = req.query.page || 0;
+	const searchQuery = req.query.q;
+
+	if (searchQuery == "") {
+		res.status(400).json({type:"failure", message:"Please provide a search query.", data:null, errors:null});
+		return;
+	}
+
+	try{
+
+		let totalNumberOfSearchResults = await User.countDocuments({$text:{$search:searchQuery}});
+
+		let skipCount = (function(pageLimit, n, pageno){
+			let skip = pageLimit * page;
+
+			if (skip > n) return (n - (n % pageLimit))
+			return skip
+		})(pageLimit, totalNumberOfSearchResults, page);
+
+		let searchResults = await User.find({$text:{$search:searchQuery}}, {_id:1, username:1, profile:1, score:{$meta:"textScore"}}).sort({score:{$meta:"textScore"}}).limit(pageLimit).skip(skipCount)
+
+		res.status(200).json({type:'success', message:'Search successfull', data:{posts: searchResults, userProfile:{}, totalPosts:totalNumberOfSearchResults}, errors:null})
+
+	} catch(err) {
+
+		console.warn(err);
+
+		res.status(400).json({type:"failure", message:"Something wen't wrong", data:null, errors:null});
+	}
+
 })
 
 

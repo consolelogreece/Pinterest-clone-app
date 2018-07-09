@@ -27,6 +27,10 @@ const followingtemplate = props => {
           <div className="search-result-entry-username-container">
             <h4 className="search-result-entry-username"><Link to={`/user?id=${props.data._id}`} onClick={() => props.clearSearch()} >{props.data.username}</Link></h4>
           </div>
+
+          <div className="search-result-entry-bio-container">
+            <h4 className="search-result-entry-username">{props.data.profile.bio}</h4>
+          </div>
         </div>
     )
   }

@@ -3,6 +3,8 @@ export default (state = {}, action = {}) => {
 		case "TOGGLE_POST_POPUP":
 			return {...state, renderNewPostPopup: !state.renderNewPostPopup }
 
+		case "RECEIVED_PEOPLE":
+			console.log(JSON.stringify(action.data, 0, 2))
 		case "RECEIVED_FOLLOWING":
 		case "RECEIVED_POSTS":
 			if (!action.data) return {...state, currentPagePosts:{userProfile:{}, posts:[], totalposts:0}}; 
