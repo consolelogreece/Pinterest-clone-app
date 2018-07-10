@@ -71,6 +71,12 @@ class userpostpage extends React.PureComponent {
 	    this.populatePostArray();
 	 }
 
+
+
+	redirectSignin = () => {
+		this.props.history.push("/signin");
+	}
+
 	render(){
 
 		let parsedUrlObject = queryString.parse(this.props.history.location.search);
@@ -84,9 +90,6 @@ class userpostpage extends React.PureComponent {
 			isFollowing = (this.props.followingIds.indexOf(userId) === -1 ) ? false : true;
 			isProfileCurrentUsers = (userId !== this.props.userId) ? false : true;
 		}
-		
-
-
 
 		return(
 			<div>

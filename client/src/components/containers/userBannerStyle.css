@@ -1,28 +1,20 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
-.follow-button {
-  -ms-transform: translate(130px, 130px); /* IE 9 */
-  -webkit-transform: translate(130px, 130px); /* Safari 3-8 */
+.follow-button-container {
   transform: translate(130px, 130px);
-  background-color:#fff;
-  position:fixed;
-  z-index:2;
-  border-radius:100%;
-  height:40px;
-  width:40px;
-  outline:none;
-  border:2px solid #d15559;
-  cursor: pointer;
-  overflow:hidden;
-  text-align: center;
-
-
+  position:relative;
+  z-index: 99;
 }
 
-
-body {
-  margin:0;
-  padding:0;
+.follow-button {
+  background-color:#fff;
+  position:fixed;
+  zindex:99;
+  border-radius:100%;
+  height:45px;
+  width:45px;
+  outline:none;
+  border:2px solid #d15559;
 }
 
 
@@ -41,16 +33,9 @@ body {
   max-width:1200px /* MAX WIDTH OF MY CURRENT PROJECT IN WHICH THIS WILL BE IMPLEMENTED*/
 }
 .pic-box--mobile {
-  margin:0 auto;
-  border-radius:50%;
-  border-style: solid !important;
-  border-color: #fff !important;
-  border-width: 2px !important;
   height:180px;
   width:180px;
-  position:relative;
-  overflow: hidden;
-
+  margin:0 auto;
 }
 
 .picture-element--mobile {
@@ -96,7 +81,7 @@ body {
   font-size:0.9rem;
   text-align:center;
   color:#fff;
-    margin-top:30px;
+  margin-top:30px;
 
 }
   .banner-wrapper{
@@ -111,6 +96,23 @@ body {
 
 #username--mobile, #username {
   margin-top:1vw;
+}
+
+.pic {
+  border-radius:50%;
+  border-style: solid !important;
+  border-color: #fff !important;
+  border-width: 2px !important;
+  height:180px;
+  width:`180px;
+  position:relative;
+  overflow: hidden;
+
+}
+
+.pic-box {
+  height:180px;
+  width:180px;
 }
 
 @media only screen and (min-width:505px) {
@@ -131,16 +133,6 @@ body {
     height:200px;
     padding:8px;
     max-width:1200px;
-  }
-  .pic-box {
-    border-radius:50%;
-    border-style: solid !important;
-    border-color: #fff !important;
-    border-width: 2px !important;
-    height:180px;
-    width:180px;
-    position:relative;
-    overflow: hidden;
   }
 
   .picture-element {
@@ -185,8 +177,5 @@ body {
     color:#fff;
     text-align:center;
     margin-top:15px;
-
-
-
   }
 }
