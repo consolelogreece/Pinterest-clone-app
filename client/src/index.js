@@ -44,6 +44,9 @@ checkLoggedIn_GetData().then(response => {
 		store.dispatch({type:"USER_SIGNED_IN", user:response.data.data})
 	}
 
+}).catch(err => {
+	console.log(err);
+	// remove cookie, as not authd
 })
 
 ReactDOM.render(

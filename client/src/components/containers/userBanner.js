@@ -1,14 +1,25 @@
 import React from 'react';
 import styles from './userBannerStyle.css'
+import { Icon } from 'semantic-ui-react';
 
 const userBanner = props => {
-	return (
 
+	console.log(props.isFollowing)
+	return (
 		<div>
 			<div className="banner-wrapper--mobile">
 			  <div className="banner--mobile">
-
 			    <div className="pic-box--mobile">
+		    		{!props.isProfileCurrentUsers && 
+			    			<Icon 
+			    				onClick={() => props.follow(props.userId)}
+				    			name="plus" 
+				    			className="follow-button" 
+				    			size="big" 
+				    			circular={true} 
+				    			color={props.isFollowing ? "green" : "grey"}
+				    		/>
+		    		}			  
 			      <img alt="User's display pic" onError={e => e.target.src='https://i.imgur.com/xRped5d.png'} className="picture-element--mobile" src={!props.userProfile.picture ? "https://i.imgur.com/xRped5d.png" : props.userProfile.picture} />
 			    </div>
 
@@ -36,6 +47,17 @@ const userBanner = props => {
 			  <div className="banner">
 
 			    <div className="pic-box">
+		    		{!props.isProfileCurrentUsers && 
+			    			<Icon 
+			    				onClick={() => props.follow(props.userId)}
+				    			name="plus" 
+				    			className="follow-button" 
+				    			size="big" 
+				    			circular={true} 
+				    			color={props.isFollowing ? "green" : "grey"}
+				    		/>
+		    		}
+			 
 			      <img alt="User's display pic" onError={e => e.target.src='https://i.imgur.com/xRped5d.png'} className="picture-element" src={!props.userProfile.picture ? "https://i.imgur.com/xRped5d.png" : props.userProfile.picture} />
 			    </div>
 

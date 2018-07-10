@@ -44,24 +44,24 @@ class userpostpage extends React.PureComponent {
 		
 			case "first":
 				this.props.history.push(pagepath + "0");
-				this.populatePostArray();
 				break;
 			case "prev":
 				if (page !== 0) this.props.history.push(pagepath + (page - 1));
-				this.populatePostArray();
 				break;
 			case "next":
-				this.props.history.push(pagepath + (page + 1));
-				this.populatePostArray();
+				this.props.history.push(pagepath + (page + 1));	
 				break;
 			case "last":
 				// 12 = total posts per page.
-				this.props.history.push(pagepath + (Math.floor(this.props.totalPosts / 12)));
-				this.populatePostArray();
+				this.props.history.push(pagepath + (Math.floor(this.props.totalPosts / 12)));		
 				break;
 			default:
-				return;
+				break;
+
+
 		}
+
+		this.populatePostArray();
 	}
 
 	componentDidUpdate (prevProps) {
@@ -73,9 +73,31 @@ class userpostpage extends React.PureComponent {
 
 	render(){
 
+		let parsedUrlObject = queryString.parse(this.props.history.location.search);
+
+		let userId = parsedUrlObject['?id'];
+
+		let isFollowing = false;
+		let isProfileCurrentUsers = false;
+
+		if (!!this.props.followingIds) {
+			isFollowing = (this.props.followingIds.indexOf(userId) === -1 ) ? false : true;
+			isProfileCurrentUsers = (userId !== this.props.userId) ? false : true;
+		}
+		
+
+
+
 		return(
 			<div>
-				<UserBanner history={this.props.history} userProfile={this.props.userProfile} />
+				<UserBanner 
+					follow={this.props.isAuthenticated ? ((isFollowing) ? this.props.unfollow : this.props.follow) : this.redirectSignin}
+					isFollowing={isFollowing} 
+					isProfileCurrentUsers={isProfileCurrentUsers}
+					history={this.props.history} 
+					userId={userId}
+					userProfile={this.props.userProfile} 
+				/>
 				<CardContainer history={this.props.history} {...this.props} populatePostArray={this.populatePostArray} handlePageChange={this.handlePageChange} />
 			</div>
 		)

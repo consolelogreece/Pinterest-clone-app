@@ -37,30 +37,32 @@ class feedpage extends Component {
 		
 			case "first":
 				this.props.history.push(pagepath + "0");
-				this.populatePostArray();
 				break;
 			case "prev":
 				if (page !== 0) this.props.history.push(pagepath + (page - 1));
-				this.populatePostArray();
 				break;
 			case "next":
 				this.props.history.push(pagepath + (page + 1));
-				this.populatePostArray();
 				break;
 			case "last":
 				// 12 = total posts per page.
-				this.props.history.push(pagepath + (Math.floor(this.props.totalPosts / 12)));
-				this.populatePostArray();
+				this.props.history.push(pagepath + (Math.floor(this.props.totalPosts / 12)));		
 				break;
 			default:
-				return;
+				break;
 		}
+		this.populatePostArray();
 	}
+
 
 	render(){
 		return(
 			<div>
-				<UserBanner userProfile={this.props.userProfile} />
+				<UserBanner 
+					userProfile={this.props.userProfile}
+					isProfileCurrentUsers={true}
+					follow={() => this.props.history.push("/")}
+				/>
 				<CardContainer {...this.props} populatePostArray={this.populatePostArray} handlePageChange={this.handlePageChange} />
 			</div>
 		)

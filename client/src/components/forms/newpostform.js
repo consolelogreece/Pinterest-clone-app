@@ -73,7 +73,7 @@ class newpostform extends Component {
 					 		<Button.Group style={{width:"90%", margin:"0 auto"}} >
 								<Button style={{ backgroundColor:"#d15559", color:"#fff"}} onClick={() => this.handleSubmit()} primary>Submit</Button>
 						    	<Button.Or />
-						   		<Button style={{backgroundColor:"#202020", color:"#fff"}} onClick={() => this.props.closeform()}>cancel</Button>
+						   		<Button style={{backgroundColor:"#cecccc", color:"#212121"}} onClick={() => this.props.closeform()}>cancel</Button>
 					  		</Button.Group> 
 					    </Grid.Row>
 					</Grid>

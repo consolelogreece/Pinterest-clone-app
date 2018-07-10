@@ -28,7 +28,6 @@ class cardContainer extends Component {
 				isLiked = (this.props.likedPostIds.indexOf(post._id) === -1 ) ? false : true
 				isShared = (this.props.sharedPostIds.indexOf(post._id) === -1 ) ? false : true
 				isFollowing = (this.props.followingIds.indexOf(post.authorId) === -1 ) ? false : true	
-
 			}
 
 			let doesPostBelongCurrentUser = false

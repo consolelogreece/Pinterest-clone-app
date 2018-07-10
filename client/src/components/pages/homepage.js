@@ -1,23 +1,28 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { togglepostpopup } from '../../actions/appfunctions';
-
+import "./homepage-styles.css"
 
 class homepage extends Component {
 
 	render(){
 		return(
-			<div style={{ width:'100%', margin:'auto', 'backgroundColor': (this.props.renderNewPostPopup ? 'rgba(0,0,0,0.4)' : null)}}>
-				<h1>home</h1><br />
-				<h2>TODO:
-				<br />
-				add view all page with pagination, so views can view all results of search
-		
-		
-				<br />
-				why does mongodb $text $search not work with letter a? 
-				</h2>
-				<button onClick={() => this.props.onToggleClick()}>toggle post popup</button> <br />
+			<div id="home">
+			  <div id="hello-container">
+			  	{
+			  		!this.props.isAuthenticated ? (
+			  			<div>
+				  			<h1 className="hello">Hello</h1>
+						    <button onClick={() => this.props.history.push("/signin")} className="home-screen-buttons">Sign in</button> 
+						    <button onClick={() => this.props.history.push("/signup")} className="home-screen-buttons">Sign up</button>
+					    </div>
+			  		) : (
+			  			<div>
+			  				<h1 className="hello">Welcome back, <br />{this.props.username}</h1>
+			  			</div>
+			  		)
+			  	}
+			  </div>
 			</div>
 		)
 	}
@@ -25,17 +30,16 @@ class homepage extends Component {
 
 
 
-const mapDispatchToProps = dispatch => {
+const mapStateToProps = state => {
   return {
-    onToggleClick: () => {
-      dispatch(togglepostpopup())
-    }
+ 	isAuthenticated:state.user.isAuthenticated,
+ 	username:state.user.username
   }
 }
 
 
 
-export default connect(null, mapDispatchToProps)(homepage);
+export default connect(mapStateToProps)(homepage);
 
 
 
