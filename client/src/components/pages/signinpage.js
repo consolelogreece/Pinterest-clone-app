@@ -26,7 +26,7 @@ class signinpage extends Component {
 				{this.state.reset ? <PasswordResetRequestForm resetPassword={this.resetpassword} setReset={this.setReset}/> : <SigninForm setReset={this.setReset} signin={this.signin_native}/>}
 				<br />
 				<h2 style={{ width: "100%", textAlign: "center", borderBottom: "1px solid #000", "lineHeight": "0.1em", margin: "10px 0 20px" }}><span style={{background:"#fff", padding:"0 10px"}}>or</span></h2>
-				<Thirdpartysigninform />
+				<Thirdpartysigninform signin_google={this.signin_google}/>
 			</div>
 		)
 	}

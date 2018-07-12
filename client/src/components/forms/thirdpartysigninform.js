@@ -1,12 +1,27 @@
 import {Button} from 'semantic-ui-react';
 import React from 'react';
 
-const thirdpartysigninform = () => {
+const thirdpartysigninform = props=> {
 	return (
 		<div>
-			<form action="http://localhost:8080/auth/google">
-				<Button style={{backgroundColor:"#d15559", color:"#fff"}}>Sign in with Google+</Button>
-			</form>
+			<a 
+				href="http://localhost:8080/auth/google" 
+				style={{    
+					display: "block",
+				    width: "180px",
+				    height: "40px",
+				    background: "#4E9CAF",
+				    padding: "10px",
+				    textAlign: "center",
+				    borderRadius: "5px",
+				    color: "white",
+				    fontWeight: "bold",
+				    backgroundColor:"#d15559", 
+				    color:"#fff"
+				}}
+			>
+				Sign in with Google+
+			</a>
 		</div>
 	)
 }

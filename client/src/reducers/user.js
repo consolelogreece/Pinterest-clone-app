@@ -6,6 +6,9 @@ export default (state = {}, action = {}) => {
 		case "LOGIN_GOOGLE":
 			return {...state, ...action.user, isAuthenticated:true}
 
+		case "SAVE_PREVIOUS_INSTANCE_USERNAME_TO_STORE": 
+			return {...state, userdata:action.userdata}
+
 		case "USER_LIKED_POST":
 			return {...state, likedPostIds:[...state.likedPostIds, action.id]}
 

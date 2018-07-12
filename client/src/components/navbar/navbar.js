@@ -127,9 +127,9 @@ class navbar extends Component {
 					<nav>
 					  <div id="navbarcontainer">
 					    <ul id="navbarlist">
-					      <li onClick={() => this.props.history.push("/")} style={{"display":"inline-block"}} >Home</li>
-					      <li onClick={() => this.props.history.push("/signin")} style={{"display":"inline-block"}} >Sign in</li>
-					      <li onClick={() => this.props.history.push("/signup")} style={{"display":"inline-block"}} >Sign up</li>
+					      <li className="navbar-item-desktop" onClick={() => this.props.history.push("/")} style={{"display":"inline-block"}} >Home</li>
+					      <li className="navbar-item-desktop"  onClick={() => this.props.history.push("/signin")} style={{"display":"inline-block"}} >Sign in</li>
+					      <li className="navbar-item-desktop"  onClick={() => this.props.history.push("/signup")} style={{"display":"inline-block"}} >Sign up</li>
 					    </ul>
 					  </div>
 					  <div id="navbar_container--mobile">

@@ -42,6 +42,10 @@
   margin:6px 7px;
 }
 
+.home-screen-buttons:hover {
+  background-color:rgba(0,0,0, 0.1);
+}
+
 @media screen and (max-width: 565px) {
 	.hello {
 		font-size:40px;

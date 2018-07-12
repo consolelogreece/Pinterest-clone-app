@@ -2,6 +2,7 @@ import express from 'express';
 import { Post } from '../models/post-model';
 import { User } from '../models/user-model';
 import validator from 'validator';
+import getSkipCount from '../utils/getSkipCount'
 
 const ObjectID = require('mongodb').ObjectID;
 
@@ -51,12 +52,7 @@ router.get("/user", async (req, res) => {
 			return;
 		}
 
-		let skipCount = (function(pageLimit, totalPosts, pageno){
-			let skip = pageLimit * page;
-
-			if (skip > totalPosts) return (totalPosts - (totalPosts % pageLimit))
-			return skip
-		})(pageLimit, userPostsAndUsername.postIds.length, page);
+		let skipCount = getSkipCount(pageLimit, userPostsAndUsername.postIds.length, page);
 
 		const postDataArray = await Post.find({_id: {$in:userPostsAndUsername.postIds}}).limit(pageLimit).skip(skipCount)
 
@@ -87,12 +83,7 @@ router.get("/feed", authCheck,  async (req, res) => {
 
 		const uniqueIdArray =  allIds.filter((item, pos, ar) => ar.indexOf(item) === pos);
 
-		const skipCount = (function(pageLimit, totalPosts, pageno){
-			let skip = pageLimit * page;
-
-			if (skip > totalPosts) return (totalPosts - (totalPosts % pageLimit))
-			return skip
-		})(pageLimit, allIds.size, page);
+		const skipCount = getSkipCount(pageLimit, allIds.size, page);
 
 		const posts = await Post.find({_id:{$in:allIds}}).sort({creationDate:-1}).limit(pageLimit).skip(skipCount);
 
@@ -232,9 +223,9 @@ router.post("/followuser", authCheck, (req, res) => {
 		// remove the id of the person the user wants to follow, to their 'followingIds array
 		const removeUserIdFromFollowing = User.updateOne({_id:userdata._id}, {$pull:{followingIds:userId}})
 		// remove the id of the user to the person they want to follow's 'following' array
-		const removeUserIdToFollowers = User.updateOne({_id:userId}, {$pull:{followersIds:userdata._id}})
+		const removeUserIdInFollowers = User.updateOne({_id:userId}, {$pull:{followersIds:userdata._id.toString()}})
 		
-		Promise.all([removeUserIdFromFollowing, removeUserIdToFollowers]).then(() => {
+		Promise.all([removeUserIdFromFollowing, removeUserIdInFollowers]).then(() => {
 			res.status(200).json({type:"success", message:"User successfully unfollwed", data:null, errors:null});
 		}).catch(err => {
 			console.warn(err);
@@ -257,12 +248,7 @@ router.get("/getfollowinglist", authCheck, async (req, res) => {
 		const page = req.query.page || 0;
 		const totalFollowing = userdata.followingIds.length
 
-		let skipCount = (function(pageLimit, totalPosts, pageno){
-			let skip = pageLimit * page;
-
-			if (skip > totalPosts) return (totalPosts - (totalPosts % pageLimit))
-			return skip
-		})(pageLimit, totalFollowing, page);
+		let skipCount = getSkipCount(pageLimit, totalFollowing, page);
 
 		const userFollowingDetails = await User.find({_id:{$in:userdata.followingIds}}, { _id:1, username:1, profile:1}).limit(pageLimit).skip(skipCount)
 
@@ -328,12 +314,7 @@ router.get("/search",  async (req, res) => {
 
 		let totalNumberOfSearchResults = await User.countDocuments({$text:{$search:searchQuery}});
 
-		let skipCount = (function(pageLimit, n, pageno){
-			let skip = pageLimit * page;
-
-			if (skip > n) return (n - (n % pageLimit))
-			return skip
-		})(pageLimit, totalNumberOfSearchResults, page);
+		let skipCount = getSkipCount(pageLimit, totalNumberOfSearchResults, page);
 
 		let searchResults = await User.find({$text:{$search:searchQuery}}, {_id:1, username:1, profile:1, score:{$meta:"textScore"}}).sort({score:{$meta:"textScore"}}).limit(pageLimit).skip(skipCount)
 
@@ -347,14 +328,6 @@ router.get("/search",  async (req, res) => {
 	}
 
 })
-
-
-
-
-
-
-
-
 
 
 export default router;

@@ -38,6 +38,13 @@ const initialState = {
 }
 
 const store = createStore(rootreducer, initialState, composeWithDevTools(applyMiddleware(thunk)))
+if (localStorage.userdata) {
+	const data = JSON.parse(localStorage.getItem("userdata"))
+	store.dispatch({
+		type:"SAVE_PREVIOUS_INSTANCE_USERNAME_TO_STORE", 
+		userdata: data
+	})
+}
 
 checkLoggedIn_GetData().then(response => {
 	if (response.data.isAuthenticated) {
@@ -46,7 +53,7 @@ checkLoggedIn_GetData().then(response => {
 
 }).catch(err => {
 	console.log(err);
-	// remove cookie, as not authd
+	localStorage.clear();
 })
 
 ReactDOM.render(

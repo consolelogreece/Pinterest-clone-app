@@ -26,7 +26,6 @@ class homepage extends Component {
 								    <button onClick={() => this.props.history.push("/profile")} className="home-screen-buttons">Profile</button>
 								   	<button onClick={() => this.props.history.push("/settings")} className="home-screen-buttons">Settings</button> 
 							   	</div>
-				
 			  			</div>
 			  		)
 			  	}

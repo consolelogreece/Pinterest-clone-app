@@ -19,6 +19,7 @@ export const signin_native = credentials => dispatch => {
 	return axios.post('/auth/signin/native',  credentials )
 				.then(user => {
 					dispatch(userSignedIn_Native(user.data.data))
+					localStorage.setItem('userdata', JSON.stringify(user.data.data))
 					return user
 				})
 }
@@ -45,6 +46,7 @@ export const signin_google = () => {
 export const signin_google_redirect = code => dispatch => {
 	return axios.get(`/auth/google/redirect?code=${code}`, {code:code}).then(response => {
 		dispatch({type:'LOGIN_GOOGLE', user:response.data.data})
+		localStorage.setItem('userdata', JSON.stringify(response.data.data))
 	})
 }
 
@@ -67,4 +69,5 @@ export const signOut = () => dispatch => {
 		})
 }
 
+// const generateCookie = 
 

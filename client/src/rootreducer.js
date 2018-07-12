@@ -35,6 +35,7 @@ const appReducer = combineReducers({
 
 const rootReducer = (state, action) => {
 	if (action.type === 'USER_LOGGED_OUT') {
+		localStorage.clear();
 		state = initialState;
 	}
 
