@@ -1,7 +1,6 @@
 import passport from 'passport';
 import GoogleStrategy from 'passport-google-oauth20';
 import LocalStrategy from 'passport-local';
-import keys from './keys';
 import { User } from '../models/user-model';
 import { isCorrectPassword } from '../auth/authentication';
 
@@ -19,8 +18,8 @@ passport.use(
 	new GoogleStrategy({
 		// strategy options
 		callbackURL:'http://localhost:3000/auth/google/redirect',
-		clientID:keys.google.clientID,
-		clientSecret:keys.google.clientSecret
+		clientID:process.env.CLIENT_ID,
+		clientSecret:process.env.CLIENT_SECRET
 	}, (accessToken, refreshToken, profile, done) => {
 
 		//check if user exists already
@@ -49,8 +48,6 @@ passport.use(
 
 			}
 		});
-
-		
 	})
 )
 

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec babel-node -- index.js"
+    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build",
+    "start": "babel-node -- index.js"
   },
   "author": "",
   "license": "ISC",
