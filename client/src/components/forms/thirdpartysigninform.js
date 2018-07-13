@@ -1,11 +1,13 @@
 import {Button} from 'semantic-ui-react';
 import React from 'react';
+import axios from 'axios';
 
 const thirdpartysigninform = props=> {
 	return (
 		<div>
 			<a 
-				href="/auth/google" 
+				href="#"
+				onClick={() => props.signin_google()}
 				style={{    
 					display: "block",
 				    width: "180px",
@@ -22,6 +24,7 @@ const thirdpartysigninform = props=> {
 			>
 				Sign in with Google+
 			</a>
+
 		</div>
 	)
 }

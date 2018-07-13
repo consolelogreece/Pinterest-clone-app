@@ -149,4 +149,3 @@ router.get('/google', passport.authenticate('google', {
 
 
 export default router;
-

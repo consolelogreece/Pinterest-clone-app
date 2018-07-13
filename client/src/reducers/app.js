@@ -5,7 +5,6 @@ export default (state = {}, action = {}) => {
 			return {...state, renderNewPostPopup: !state.renderNewPostPopup }
 
 		case "RECEIVED_PEOPLE":
-			console.log(JSON.stringify(action.data, 0, 2))
 		case "RECEIVED_FOLLOWING":
 		case "RECEIVED_POSTS":
 			if (!action.data) return {...state, currentPagePosts:{userProfile:{}, posts:[], totalposts:0}}; 
@@ -28,9 +27,39 @@ export default (state = {}, action = {}) => {
 		case "CLEAR_SEARCH_RESULTS": 	
 			return {...state, search:{...state.search, displaySearch:false, data:{results:[], isMoreThanLimit:false}}}
 
+
+		case "USER_LIKED_POST":
+			newArray = incrementLikeOrShare(state.currentPagePosts.posts, action.id, "likes", 1);
+			return {...state, currentPagePosts:{...state.currentPagePosts, posts:newArray}}
+
+
+		case "USER_UNLIKED_POST":
+			newArray = incrementLikeOrShare(state.currentPagePosts.posts, action.id, "likes", -1);
+			return {...state, currentPagePosts:{...state.currentPagePosts, posts:newArray}}
+
+		case "USER_SHARED_POST":
+			newArray = incrementLikeOrShare(state.currentPagePosts.posts, action.id, "shares", 1);
+			return {...state, currentPagePosts:{...state.currentPagePosts, posts:newArray}}
+		
+		case "USER_UNSHARED_POST":
+			newArray = incrementLikeOrShare(state.currentPagePosts.posts, action.id, "shares", -1);
+			return {...state, currentPagePosts:{...state.currentPagePosts, posts:newArray}}
+
 		default: return state;
 	}
 }
+
+
+const incrementLikeOrShare = (postArray, postId, type, inc) => {
+	const newArray = postArray.map(post => {
+		if (postId === post._id) {
+			return {...post, [type]:post[type] + inc }
+		}
+		return post;
+	})
+	return newArray;
+}
+
 
 
 

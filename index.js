@@ -33,7 +33,7 @@ passport.deserializeUser((id,done) => {
 passport.use(
     new GoogleStrategy({
         // strategy options
-        callbackURL:'http://localhost:3000/auth/google/redirect',
+        callbackURL:'/google/redirect',
         clientID:process.env.CLIENT_ID,
         clientSecret:process.env.CLIENT_SECRET
     }, (accessToken, refreshToken, profile, done) => {
@@ -92,7 +92,6 @@ passport.use(
 
 
 
-
 app.use(cookieSession({
     maxAge:24*60*60*1000,
     keys:[process.env.COOKIE_SESSION_KEY],
@@ -108,9 +107,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 mongoose.connect(process.env.MONGO_URL);
-
-
-
 
 let db;
 
@@ -142,20 +138,13 @@ app.use(helmet());
 app.use(bodyParser.json());
 
 
-
 //set up auth routes
 app.use('/auth', authRoutes)
 
 //set up app routes
 app.use('/app', appRoutes)
 
-app.use(express.static(__dirname + '/client/build'));
-
-// create home route
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, "client", "build", "index.html"))
-});
-
+app.use(express.static(__dirname + '/client/build/'));
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => console.log("Running on port " + port));

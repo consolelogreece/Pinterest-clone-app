@@ -39,8 +39,8 @@ class cardContainer extends Component {
 				  title={post.title} 
 				  username={post.authorUsername} 
 				  creationDate={post.creationDate}
-				  likes={isLiked ? post.likes + 1 : post.likes}
-				  shares={isShared ? post.shares + 1 : post.shares}
+				  likes={post.likes}
+				  shares={post.shares}
 				  key={post._id}
 				  id={post._id}
 				  likePost={this.props.isAuthenticated ? ((isLiked) ? this.props.unlikePost : this.props.likePost) : this.redirectSignin}

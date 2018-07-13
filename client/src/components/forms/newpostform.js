@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Grid, Card, Button, Form, Input, Image} from 'semantic-ui-react';
 import validator from 'validator';
+import ErrorMessageInline from '../messages/ErrorMessageInline'
 
 class newpostform extends Component {
 		state = {
@@ -39,8 +40,10 @@ class newpostform extends Component {
 			const data = this.state.data;
 
 			if (data.title === "") errors['title'] = "Can't be blank";
+			if (data.title > 100 ) errors['title'] = "Can't be longer than 100 characters";
 			if (!validator.isURL(data.imgurl)) errors['imgurl'] = "Must be valid url"
 			if (data.imgurl === "") errors['imgurl'] = "Can't be blank";
+			if (data.imgurl.length > 200) errors['imgurl'] = "Can't be longer than 200 characters.";
 
 			return errors;
 
@@ -52,6 +55,7 @@ class newpostform extends Component {
 		}
 
 	render(){
+		let {errors} = this.state;
 		return(	
 			<Card style={{'border':'1px solid grey', 'borderRadius':'6px', 'margin':'auto', boxShadow: "10px 5px 10px 5px rgba(0, 0, 0, 0.2), 10px 5px 10px 5px rgba(0, 0, 0, 0.19)", height:"500px", width:"600px"}}>
 				<div style={{'backgroundColor':'#474647', 'width':'auto'}}>
@@ -60,19 +64,19 @@ class newpostform extends Component {
 				<Card.Header style={{textAlign:"center"}}> <b>Make it a good'n</b> </Card.Header>
 				<Card.Description>
 				<div>
-					<Form onChange={(e) => this.handleChange(e)}>
+					<Form  onChange={(e) => this.handleChange(e)}>
 						<Form.Field>
-							<label>Title</label>
-							<Input value={this.state.data.title} name="title" />
+							<label style={{textAlign:"center"}} >Title</label>
+							<Input maxLength={100} value={this.state.data.title} name="title" />
 						</Form.Field>
 						<Form.Field>
-							<label>Image URL</label>
-							<Input value={this.state.data.imgurl} name="imgurl" />
+							<label style={{textAlign:"center"}}>Image URL</label>
+							<Input maxLength={200} value={this.state.data.imgurl} name="imgurl" />
 						</Form.Field>
 					</Form>
 					<Grid style={{textAlign:"center"}}>
 					    <Grid.Row>
-					 		<Button.Group style={{width:"90%", margin:"0 auto"}} >
+					 		<Button.Group style={{width:"90%", margin:"4px auto 0 auto"}} >
 								<Button style={{ backgroundColor:"#d15559", color:"#fff"}} onClick={() => this.handleSubmit()} primary>Submit</Button>
 						    	<Button.Or />
 						   		<Button style={{backgroundColor:"#cecccc", color:"#212121"}} onClick={() => this.props.closeform()}>cancel</Button>

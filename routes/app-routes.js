@@ -24,6 +24,11 @@ router.post('/newpost', authCheck, (req, res) => {
 	const data = req.user;
 	const { title, imgurl } = req.body.data;
 
+	if (title.length > 100 || !validator.isURL(imgurl) || imgurl.length > 200 ){
+		res.status(400).json({type:'error', message:'Something wen\'t wrong', data:null, errors:null});
+		return;
+	}   
+
 	const newid = new ObjectID(); // add this id to authors post id list.
 	const addpost = new Post({_id:newid, authorUsername:data.username, authorId:data.id, title:title, imageUrl:imgurl, userLikeIds:[], userShareIds:[], creationDate: new Date}).save();
 	const addPostIdToUser = User.update({_id:data.id}, {$push:{postIds:{$each:[newid.toString()], $position:0}}})
