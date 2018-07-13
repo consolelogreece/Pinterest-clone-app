@@ -1,7 +1,6 @@
 import express from 'express';
 import passport from 'passport';
 import { google } from 'googleapis';
-import keys from '../config/keys'
 import Signup from '../auth/Signup';
 import { User } from '../models/user-model';
 import Resetpasswordrequestemail from '../auth/Resetpasswordrequestemail';

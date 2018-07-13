@@ -5,16 +5,93 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth-routes';
 import appRoutes from './routes/app-routes';
-import passportSetup from './config/passport-setup'
 import mongoClient from 'mongodb';
 import nodemailer from 'nodemailer';
 import mongoose from 'mongoose';
 import cookieSession from 'cookie-session';
 import passport from 'passport';
+import GoogleStrategy from 'passport-google-oauth20';
+import LocalStrategy from 'passport-local';
+import { User } from './models/user-model';
+import { isCorrectPassword } from './auth/authentication';
 
 dotenv.config();
 
 const app = express();
+
+///////////////////////////////////passport config/////////////////////
+passport.serializeUser((user,done) => {
+    done(null, user.id)
+});
+
+passport.deserializeUser((id,done) => {
+    User.findById(id).then(user => {
+        done(null, user)
+    })
+});
+
+passport.use(
+    new GoogleStrategy({
+        // strategy options
+        callbackURL:'http://localhost:3000/auth/google/redirect',
+        clientID:process.env.CLIENT_ID,
+        clientSecret:process.env.CLIENT_SECRET
+    }, (accessToken, refreshToken, profile, done) => {
+
+        //check if user exists already
+        User.findOne({platform:'google', platformId:profile.id}).then((currentUser) => {
+            //if true, user already in db
+            if (currentUser){
+                done(null, currentUser)
+            } else {
+                new User({
+                    username:profile.displayName,
+                    platformId:profile.id,
+                    platform:'google',
+                    postIds:[],
+                    likedPostIds:[],
+                    sharedPostIds:[],
+                    followingIds:[],
+                    followersIds:[],
+                    profile:{
+                        bio:"",
+                        picture:profile._json.image.url
+                    }
+
+                }).save().then((newUser) => {
+                    done(null, newUser)
+                })
+
+            }
+        });
+    })
+)
+
+
+
+passport.use(
+    new LocalStrategy({
+        usernameField:'email',
+        passwordField:'password'
+
+    },
+        (email, password, done) => {
+            User.findOne({platform:'native', email:email}, async (err, user) => {
+                if (err) return done(err);
+                if (!user) return done(null, false);
+                const isValidPassword = await isCorrectPassword(password, user.passwordHash);
+                if (!isValidPassword) return done(null, false);
+                return done(null, user);
+            })
+        }
+    )
+)
+
+/////////////////////////////////////////////////////////////////////
+
+
+
+
 
 app.use(cookieSession({
     maxAge:24*60*60*1000,
@@ -72,6 +149,7 @@ app.use('/auth', authRoutes)
 //set up app routes
 app.use('/app', appRoutes)
 
+app.use(express.static(__dirname + '/client/build'));
 
 // create home route
 app.get('*', (req, res) => {
