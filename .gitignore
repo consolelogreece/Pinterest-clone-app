@@ -26,9 +26,8 @@ keys/
 .env.test.local
 .env.production.local
 /plan.txt
-plant.txt/
-/redirect-pages
-redirect-pages/
+plan.txt/
+
 
 npm-debug.log*
 yarn-debug.log*
