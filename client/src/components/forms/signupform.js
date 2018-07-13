@@ -10,10 +10,10 @@ class signupform extends Component {
 		super();
 		this.state={
 			data:{
-				username:'a',
-				email:'a@a.com',
-				password:'a',
-				confirmpassword:'a'
+				username:'',
+				email:'',
+				password:'',
+				confirmpassword:''
 			},
 			loading:false,
 			errors:{}

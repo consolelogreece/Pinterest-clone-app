@@ -7,8 +7,8 @@ import validator from 'validator'
 class SigninForm extends Component {
 	state={
 		data:{
-			email:"a@a.com",
-			password:"a"
+			email:"",
+			password:""
 		},
 		loading:false,
 		errors:{}	

@@ -5,8 +5,8 @@ import validator from 'validator';
 class newpostform extends Component {
 		state = {
 			data:{
-				title:'a',
-				imgurl:'https://i.imgur.com/l0dkJDp.png'
+				title:'',
+				imgurl:''
 			},
 			loading:false,
 			errors:{}
