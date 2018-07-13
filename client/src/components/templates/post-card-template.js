@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Card, Icon, Grid } from 'semantic-ui-react';
+import { Image, Card, Icon, Grid, Button, Label } from 'semantic-ui-react';
 import moment from 'moment';
 
 const card = props => {
@@ -14,39 +14,61 @@ const card = props => {
 
 		    <Card.Content>
 		    <Grid container={true} centered={true}>
-			    <Grid.Row columns={3}>
-			    	<Grid.Column textAlign="center">
-			    		{props.doesPostBelongCurrentUser 
-			    			?
-			    			<Icon size="large" onClick={() => props.deletePost(props.id)} link={true} name="delete"/>
-			    			:
-			    			<Icon size="large" onClick={() => props.follow(props.authorId)} link={true} name="plus square" color={props.isFollowing ? "green" : "grey"}/>
-			    			
-			    		}
+		    		<Grid.Column width={8} textAlign="center">
+			    		<Button  onClick={() => props.likePost(props.id)} as='div' labelPosition='right'>
+					      <Button color='red'>
+					        <Icon name={props.isLiked ? "heart" : "heart outline"} />
+					      </Button>
+					      <Label as='a' basic color='red' pointing='left'>
+					       	{props.likes}
+					      </Label>
+					    </Button>
 			    	</Grid.Column>
-			    	<Grid.Column textAlign="center">
-			    		<Icon size="large" onClick={() => props.likePost(props.id)} link={true} name="like" color={props.isLiked ? "red" : "grey"}/>
-			      
+
+			    	<Grid.Column width={8} textAlign="center">
+			    		<Button onClick={() => props.sharePost(props.id)} as='div' labelPosition='right'>
+					      <Button color='blue'>
+					        <Icon name={props.isShared ? "share square" : "share square outline"} />
+					      </Button>
+					      <Label as='a' basic color='blue' pointing='left'>
+					       	{props.shares}
+					      </Label>
+					    </Button>
 			    	</Grid.Column>
-			    	<Grid.Column textAlign="center">
-			    		<Icon size="large" onClick={() => props.sharePost(props.id)} name="share square" link={true} color={props.isShared ? "blue" : "grey"}/>
-			    	</Grid.Column>
-			    </Grid.Row>
 			</Grid>	
 		    </Card.Content>
 
 		    <Card.Content>
-		    {props.doesPostBelongCurrentUser 
-		    	?
-		    	<Card.Meta>{"Posted by You"}</Card.Meta>
-		    	:
-		    	<Card.Meta>{"Posted by "} <a href={`/user?id=${props.authorId}`}>{props.username}</a></Card.Meta>
-		    }
-		    	
-			    <Card.Meta>{`${moment(props.creationDate).format("MMM Do YYYY, h:mm a")}`}</Card.Meta>
+			    <Grid>
+				   	<Grid.Column width={12}>
+					    {props.doesPostBelongCurrentUser 
+					    	?
+					    	<Card.Meta>{"Posted by You"}</Card.Meta>
+					    	:
+					    	<Card.Meta>{"Posted by "} <a href={`/user?id=${props.authorId}`}>{props.username}</a></Card.Meta>
+					    }
+
+						<Card.Meta>{`${moment(props.creationDate).format("MMM Do YYYY, h:mm a")}`}</Card.Meta>
+					</Grid.Column>
+					<Grid.Column width={4}>
+					   	{props.doesPostBelongCurrentUser &&	
+					    	<div style={{marginTop:"10px", marginLeft:"10px"}}>
+				    			<Icon size="large" onClick={() => {
+				    					if (window.confirm('Are you sure you wan\'t to delete? This action can\'t be undone.')) {
+								        	props.deletePost(props.id)
+								    	} else {
+								        	return false;
+								    	}
+				    					}} 
+				    				link={true} 
+				    				name="delete"
+				    			/>
+				    		</div>				  			
+				    	}
+					</Grid.Column>
+				</Grid>
 		    </Card.Content>
 		</Card>
-		//aa
 	)
 }
 

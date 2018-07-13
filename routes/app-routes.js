@@ -54,9 +54,23 @@ router.get("/user", async (req, res) => {
 
 		let skipCount = getSkipCount(pageLimit, userPostsAndUsername.postIds.length, page);
 
-		const postDataArray = await Post.find({_id: {$in:userPostsAndUsername.postIds}}).limit(pageLimit).skip(skipCount)
+		const posts = await Post.find({_id: {$in:userPostsAndUsername.postIds}}).sort({creationDate:-1}).limit(pageLimit).skip(skipCount)
 
-		res.status(200).json({type:'success', message:'Posts successfully retreived', data:{userProfile:{ username: userPostsAndUsername.username,  bio:userPostsAndUsername.profile.bio, picture:userPostsAndUsername.profile.picture,  followingcount:userPostsAndUsername.followingIds.length, followerscount:userPostsAndUsername.followersIds.length }, posts:postDataArray, totalPosts:userPostsAndUsername.postIds.length}, errors:null})
+		const postReturnArray = posts.map(post => {
+			return {
+				likes:post.userLikeIds.length, 
+				shares:post.userShareIds.length,
+				_id:post._id,
+				authorUsername:post.authorUsername,
+				authorId:post.authorId,
+				title:post.title,
+				imageUrl:post.imageUrl,
+				creationDate:post.creationDate
+			}
+		})
+
+
+		res.status(200).json({type:'success', message:'Posts successfully retreived', data:{userProfile:{ username: userPostsAndUsername.username,  bio:userPostsAndUsername.profile.bio, picture:userPostsAndUsername.profile.picture,  followingcount:userPostsAndUsername.followingIds.length, followerscount:userPostsAndUsername.followersIds.length }, posts:postReturnArray, totalPosts:userPostsAndUsername.postIds.length}, errors:null})
 
 	} catch (err) {
 		console.warn(err);
@@ -87,7 +101,20 @@ router.get("/feed", authCheck,  async (req, res) => {
 
 		const posts = await Post.find({_id:{$in:allIds}}).sort({creationDate:-1}).limit(pageLimit).skip(skipCount);
 
-		res.status(200).json({type:'success', message:'Feed successfully retreived', data:{userProfile:{}, posts:posts, totalPosts:uniqueIdArray.length}, errors:null})
+		const postReturnArray = posts.map(post => {
+			return {
+				likes:post.userLikeIds.length, 
+				shares:post.userShareIds.length,
+				_id:post._id,
+				authorUsername:post.authorUsername,
+				authorId:post.authorId,
+				title:post.title,
+				imageUrl:post.imageUrl,
+				creationDate:post.creationDate
+			}
+		})
+
+		res.status(200).json({type:'success', message:'Feed successfully retreived', data:{userProfile:{}, posts:postReturnArray, totalPosts:uniqueIdArray.length}, errors:null})
 
 
 	} catch (err){
@@ -142,7 +169,7 @@ router.post("/likepost", authCheck, (req, res) => {
 
 	} else {
 
-		const removeUserIdFromPost = Post.updateOne({_id:postId}, {$pull:{userLikeIds:userdata._id}})
+		const removeUserIdFromPost = Post.updateOne({_id:postId}, {$pull:{userLikeIds:userdata._id.toString()}})
 		const removedPostIdFromUserLikes = User.update({_id:userdata.id}, {$pull:{likedPostIds:postId}})
 		Promise.all([removeUserIdFromPost, removedPostIdFromUserLikes]).then(() => {
 			res.status(200).json({type:"success", message:"Post successfully unliked", data:null, errors:null});
@@ -177,7 +204,7 @@ router.post("/sharepost", authCheck,  (req, res) => {
 			res.status(400).json({type:"failure", message:"Something wen't wrong", data:null, errors:null});
 		});	
 	} else {
-		const removeUserIdFromPost = Post.updateOne({_id:postId}, {$pull:{userShareIds:userdata._id}})
+		const removeUserIdFromPost = Post.updateOne({_id:postId}, {$pull:{userShareIds:userdata._id.toString()}})
 		const removedPostIdFromUserShares = User.update({_id:userdata.id}, {$pull:{sharedPostIds:postId}})
 		Promise.all([removeUserIdFromPost, removedPostIdFromUserShares]).then(() => {
 			res.status(200).json({type:"success", message:"Post successfully unshared", data:null, errors:null});

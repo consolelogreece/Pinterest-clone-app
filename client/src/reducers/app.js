@@ -1,4 +1,5 @@
 export default (state = {}, action = {}) => {
+	let newArray = [];
 	switch (action.type) {
 		case "TOGGLE_POST_POPUP":
 			return {...state, renderNewPostPopup: !state.renderNewPostPopup }
@@ -15,7 +16,7 @@ export default (state = {}, action = {}) => {
 
 		case "REMOVE_USER_FROM_FOLLOWING":
 		case "REMOVE_POST_FROM_USER_POST_PAGE":
-			const newArray = state.currentPagePosts.posts.filter(post => post._id !== action.id);
+			newArray = state.currentPagePosts.posts.filter(post => post._id !== action.id);
 			return {...state, currentPagePosts:{...state.currentPagePosts, posts:newArray}}	
 
 		case "RE_ADD_USER_TO_FOLLOWING": 
@@ -26,10 +27,6 @@ export default (state = {}, action = {}) => {
 
 		case "CLEAR_SEARCH_RESULTS": 	
 			return {...state, search:{...state.search, displaySearch:false, data:{results:[], isMoreThanLimit:false}}}
-
-
-
-
 
 		default: return state;
 	}
