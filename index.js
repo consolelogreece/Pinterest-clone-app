@@ -137,10 +137,8 @@ app.use(helmet());
 
 app.use(bodyParser.json());
 
-console.log(__dirname)
-
 app.use(express.static(__dirname + '/client/build'));
-app.use(express.static(__dirname + '/client/build/static'));
+
 //set up auth routes
 app.use('/auth', authRoutes)
 

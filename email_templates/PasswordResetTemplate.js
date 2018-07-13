@@ -1,5 +1,5 @@
 const template = (urlOrigin, emailTo, emailFrom, username, resetHash) => {
-	const url = `http://localhost:3000/resetpassword/page?token=${resetHash}`;
+	const url = `https://console-log-reece-kinterest.herokuapp.com/resetpassword/page?token=${resetHash}`;
 
 	let message = {
 	    from: emailFrom,
