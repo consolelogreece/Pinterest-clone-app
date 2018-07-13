@@ -130,6 +130,12 @@ const mapDispatchToProps = dispatch => {
 		unsharePost:id => {
 			dispatch(unsharePost(id))
 		},
+		follow: id => {
+			dispatch(follow(id))
+		},
+		unfollow: id => {
+			dispatch(unfollow(id))
+		},
 		deletePost: id => {
 			dispatch(deletePost(id))
 		}
