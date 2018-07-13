@@ -138,13 +138,14 @@ app.use(helmet());
 app.use(bodyParser.json());
 
 
+app.use(express.static(__dirname + '/client/build'));
 //set up auth routes
 app.use('/auth', authRoutes)
 
 //set up app routes
 app.use('/app', appRoutes)
 
-app.use(express.static(__dirname + '/client/build/'));
+
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => console.log("Running on port " + port));
