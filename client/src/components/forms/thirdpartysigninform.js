@@ -5,7 +5,7 @@ const thirdpartysigninform = props=> {
 	return (
 		<div>
 			<a 
-				href="http://localhost:8080/auth/google" 
+				href="/auth/google" 
 				style={{    
 					display: "block",
 				    width: "180px",
