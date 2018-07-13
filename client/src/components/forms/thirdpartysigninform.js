@@ -6,8 +6,8 @@ const thirdpartysigninform = props=> {
 	return (
 		<div>
 			<a 
-				href="#"
-				onClick={() => props.signin_google()}
+				href="https://console-log-reece-kinterest.herokuapp.com/auth/google"
+			
 				style={{    
 					display: "block",
 				    width: "180px",
