@@ -137,14 +137,13 @@ app.use(helmet());
 
 app.use(bodyParser.json());
 
+app.use(express.static(__dirname + '/client/build'));
 
 //set up auth routes
 app.use('/auth', authRoutes)
 
 //set up app routes
 app.use('/app', appRoutes)
-
-app.use(express.static(__dirname + '/client/build'));
 
 app.get('/*', function(req, res) {
   res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'), function(err) {
