@@ -23,21 +23,21 @@
     "googleapis": "^32.0.0",
     "helmet": "^3.12.1",
     "jsonwebtoken": "^8.3.0",
-    "mongodb": "^3.0.10",
-    "mongoose": "^5.2.1",
-    "nodemailer": "^4.6.6",
+    "mongodb": "^3.1.1",
+    "mongoose": "^5.2.3",
+    "nodemailer": "^4.6.7",
     "passport": "^0.4.0",
     "passport-google-oauth20": "^1.0.0",
     "passport-local": "^1.0.0",
-    "validator": "^10.3.0"
+    "validator": "^10.4.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.4",
+    "babel-loader": "^7.1.5",
     "babel-preset-env": "^1.7.0",
-    "nodemon": "^1.17.5",
-    "webpack": "^4.10.2",
+    "nodemon": "^1.18.2",
+    "webpack": "^4.16.0",
     "webpack-dev-server": "^3.1.4"
   }
 }
