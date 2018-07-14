@@ -8,7 +8,7 @@
     "start": "babel-node index.js --presets env"
   },
   "engines": {
-    "node": "8.11.1",
+    "node": "*",
     "npm": "*"
   },
   "author": "",
