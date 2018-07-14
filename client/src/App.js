@@ -99,7 +99,7 @@ class App extends Component {
           <PrivateRoute isAuthenticated={this.props.isAuthenticated} path='/settings' component={settingspage} />
           <Route isAuthenticated={this.props.isAuthenticated} path='/user' component={userpostpage} />
           <Route path='/people' component={peoplepage} />
-          <Route isAuthenticated={this.props.isAuthenticated} path='/auth/google/redirect' component={googleRedirect} />
+          <Route isAuthenticated={this.props.isAuthenticated} path='/authRedirect/google' component={googleRedirect} />
   	    	<Route isAuthenticated={this.props.isAuthenticated} path='/' component={homepage} />
         </Switch>
 
