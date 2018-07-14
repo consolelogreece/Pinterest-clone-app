@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { getFeed, deletePostsFromStore, sharePost, unsharePost, likePost, unlikePost, follow, unfollow, deletePost } from '../../actions/appfunctions';
+import { getFeed, deletePostsFromStore, sharePost, unsharePost, likePost, unlikePost, deletePost } from '../../actions/appfunctions';
 
 import CardContainer from '../containers/cardContainer';
 import UserBanner from '../containers/userBanner'
 
-import Masonry from 'react-masonry-component';
-import {Icon} from 'semantic-ui-react';
-
 import queryString from 'querystring';
-import PostCardTemplate from '../templates/post-card-template';
+
  
  
 class feedpage extends Component {

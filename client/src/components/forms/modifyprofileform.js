@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import styles from './modifyprofilestyles.css';
 import {Input, Image, Button} from 'semantic-ui-react';
 import validator from 'validator';
 import SuccessMessageInline from '../messages/SuccessMessageInline';
 import ErrorMessageInline from '../messages/ErrorMessageInline';
+
+import './modifyprofilestyles.css';
 
 class modifyprofileform extends Component {
 

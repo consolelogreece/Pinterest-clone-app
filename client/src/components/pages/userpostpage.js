@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
 import { getPosts, deletePostsFromStore, sharePost, unsharePost, likePost, unlikePost, follow, unfollow, deletePost } from '../../actions/appfunctions';
@@ -6,11 +6,8 @@ import { getPosts, deletePostsFromStore, sharePost, unsharePost, likePost, unlik
 import CardContainer from '../containers/cardContainer';
 import UserBanner from '../containers/userBanner'
 
-import Masonry from 'react-masonry-component';
-import {Icon} from 'semantic-ui-react';
-
 import queryString from 'querystring';
-import PostCardTemplate from '../templates/post-card-template';
+
  
 class userpostpage extends React.PureComponent {
 

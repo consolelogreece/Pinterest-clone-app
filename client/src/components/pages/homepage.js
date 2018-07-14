@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { togglepostpopup } from '../../actions/appfunctions';
 import "./homepage-styles.css"
 
 class homepage extends Component {

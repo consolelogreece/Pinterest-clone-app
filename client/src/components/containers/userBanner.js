@@ -1,6 +1,7 @@
 import React from 'react';
-import styles from './userBannerStyle.css'
 import { Icon } from 'semantic-ui-react';
+
+import './userBannerStyle.css';
 
 const userBanner = props => {
 	return (

@@ -1,7 +1,9 @@
 import React from 'react';
 import {Icon} from 'semantic-ui-react';
-import styles from './following-template-style.css';
-import {Link} from 'react-router-dom'
+import {Link} from 'react-router-dom';
+
+import './following-template-style.css';
+
 
 const followingtemplate = props => {
 

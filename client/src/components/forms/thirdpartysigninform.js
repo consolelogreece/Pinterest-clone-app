@@ -1,4 +1,3 @@
-import {Button} from 'semantic-ui-react';
 import React from 'react';
 import {Link} from 'react-router-dom'
 
@@ -15,7 +14,6 @@ const thirdpartysigninform = props=> {
 					    padding: "10px",
 					    textAlign: "center",
 					    borderRadius: "5px",
-					    color: "white",
 					    fontWeight: "bold",
 					    backgroundColor:"#d15559", 
 					    color:"#fff"

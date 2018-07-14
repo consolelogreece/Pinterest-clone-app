@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {Grid, Card, Button, Form, Input, Image} from 'semantic-ui-react';
 import validator from 'validator';
-import ErrorMessageInline from '../messages/ErrorMessageInline'
 
 class newpostform extends Component {
 		state = {
@@ -55,7 +54,6 @@ class newpostform extends Component {
 		}
 
 	render(){
-		let {errors} = this.state;
 		return(	
 			<Card style={{'border':'1px solid grey', 'borderRadius':'6px', 'margin':'auto', boxShadow: "10px 5px 10px 5px rgba(0, 0, 0, 0.2), 10px 5px 10px 5px rgba(0, 0, 0, 0.19)", height:"500px", width:"600px"}}>
 				<div style={{'backgroundColor':'#474647', 'width':'auto'}}>

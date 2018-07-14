@@ -1,7 +1,8 @@
 import React from 'react';
-import {Icon} from 'semantic-ui-react';
-import styles from './search-result-template-style.css'
 import {Link} from 'react-router-dom';
+
+import './search-result-template-style.css'
+
 
 const followingtemplate = props => {
   if (props.isNotResult) {

@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import {Icon, Input} from 'semantic-ui-react';
 import SearchResultTemplate from '../templates/search-result-template';
 
-
-import styles from './navbar.css' 
+import './navbar.css' ;
 
 class navbar extends Component {
 	constructor(){

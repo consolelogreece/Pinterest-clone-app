@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import Masonry from 'react-masonry-component';
 import {Icon} from 'semantic-ui-react';
 
-import queryString from 'querystring';
 import PostCardTemplate from '../templates/post-card-template';
  
 class cardContainer extends Component {
