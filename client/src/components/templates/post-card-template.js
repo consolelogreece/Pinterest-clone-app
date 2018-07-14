@@ -19,7 +19,7 @@ const card = props => {
 					      <Button color='red'>
 					        <Icon name={props.isLiked ? "heart" : "heart outline"} />
 					      </Button>
-					      <Label as='a' basic color='red' pointing='left'>
+					      <Label as='a' basic pointing='left'>
 					       	{props.likes}
 					      </Label>
 					    </Button>
@@ -30,7 +30,7 @@ const card = props => {
 					      <Button color='blue'>
 					        <Icon name={props.isShared ? "share square" : "share square outline"} />
 					      </Button>
-					      <Label as='a' basic color='blue' pointing='left'>
+					      <Label as='a' basic pointing='left'>
 					       	{props.shares}
 					      </Label>
 					    </Button>
