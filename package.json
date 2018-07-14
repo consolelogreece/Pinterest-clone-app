@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build",
-    "start": "nodemon --exec babel-node index.js --presets env"
+    "start": "babel-node index.js --presets env"
   },
   "engines": {
     "node": "8.11.1",
-    "npm": "5.6.0"
+    "npm": "*"
   },
   "author": "",
   "license": "ISC",
