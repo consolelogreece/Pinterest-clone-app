@@ -33,7 +33,7 @@ passport.deserializeUser((id,done) => {
 passport.use(
     new GoogleStrategy({
         // strategy options
-        callbackURL:'/google/redirect',
+        callbackURL:'/auth/google/redirect',
         clientID:process.env.CLIENT_ID,
         clientSecret:process.env.CLIENT_SECRET
     }, (accessToken, refreshToken, profile, done) => {
@@ -137,13 +137,14 @@ app.use(helmet());
 
 app.use(bodyParser.json());
 
-app.use(express.static(__dirname + '/client/build'));
 
 //set up auth routes
 app.use('/auth', authRoutes)
 
 //set up app routes
 app.use('/app', appRoutes)
+
+app.use(express.static(__dirname + '/client/build'));
 
 app.get('/*', function(req, res) {
   res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'), function(err) {
