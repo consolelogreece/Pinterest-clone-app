@@ -33,7 +33,7 @@ passport.deserializeUser((id,done) => {
 passport.use(
     new GoogleStrategy({
         // strategy options
-        callbackURL:'https://console-log-reece-kinterest.herokuapp.com/google/redirect',
+        callbackURL:'/google/redirect',
         clientID:process.env.CLIENT_ID,
         clientSecret:process.env.CLIENT_SECRET
     }, (accessToken, refreshToken, profile, done) => {
@@ -145,6 +145,13 @@ app.use('/auth', authRoutes)
 //set up app routes
 app.use('/app', appRoutes)
 
+app.get('/*', function(req, res) {
+  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'), function(err) {
+    if (err) {
+      res.status(500).send(err)
+    }
+  })
+})
 
 
 const port = process.env.PORT || 8080;
