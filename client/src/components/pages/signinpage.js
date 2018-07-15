@@ -17,7 +17,7 @@ class signinpage extends Component {
 
 	signin_native = data => this.props.signin_native(data).then(() => this.props.history.push("/"))
 
-	signin_google = () => signin_google().then(resp => console.log("=-===", resp));
+	signin_google = () => signin_google()
 	
 
 	render(){

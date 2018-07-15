@@ -12,7 +12,6 @@ class PasswordResetPage extends Component {
 
 	componentWillMount(){
 		let parsedUrlObject = queryString.parse(this.props.location.search)
-		console.log(parsedUrlObject, this.props.location.search)
 		if (!Object.prototype.hasOwnProperty.call(parsedUrlObject, '?token')) this.props.history.push("/")
 		else this.setState({token:parsedUrlObject['?token']})
 		

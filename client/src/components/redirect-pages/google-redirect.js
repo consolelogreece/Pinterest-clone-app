@@ -8,7 +8,6 @@ class googleRedirect extends Component {
 	componentDidMount(){
 		const parsed = queryString.parse(this.props.location.search);
 		const code = parsed.code;
-		console.log("XXXXXXXXXXgoogleredirect")
 		this.props.signin_google_redirect(code).then(() => this.props.history.push("/"))
 	}
 
